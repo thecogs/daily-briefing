@@ -1,0 +1,941 @@
+<meta charset="utf-8">
+<title>Daily Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #f0efe9;
+    --surface: #ffffff;
+    --surface-soft: #f7f5f0;
+    --border: #e1ddd0;
+    --ink: #17160f;
+    --ink-soft: #6b6656;
+    --ink-faint: #a49e8b;
+    --accent: #17324f;
+    --accent-2: #a97b2f;
+    --accent-2-wash: #f3e6cf;
+    --accent-dark: #0d1f33;
+    --accent-wash: #e7edf1;
+    --success: #2f6b4f;
+    --success-wash: #e5f0e9;
+    --bad: #a3352b;
+    --bad-wash: #f6e6e4;
+    --shadow: 0 1px 2px rgba(23,22,15,0.06), 0 1px 1px rgba(23,22,15,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12131a; --surface: #1b1c24; --surface-soft: #21222b; --border: #33343e;
+      --ink: #eeece4; --ink-soft: #aaa79a; --ink-faint: #726e60;
+      --accent: #6f9bc4; --accent-2: #d8ab5f; --accent-2-wash: #33291a;
+      --accent-dark: #0d1f33; --accent-wash: #1b2b3a;
+      --success: #57b487; --success-wash: #15301f;
+      --bad: #e0776a; --bad-wash: #341814;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12131a; --surface: #1b1c24; --surface-soft: #21222b; --border: #33343e;
+    --ink: #eeece4; --ink-soft: #aaa79a; --ink-faint: #726e60;
+    --accent: #6f9bc4; --accent-2: #d8ab5f; --accent-2-wash: #33291a;
+    --accent-dark: #0d1f33; --accent-wash: #1b2b3a;
+    --success: #57b487; --success-wash: #15301f;
+    --bad: #e0776a; --bad-wash: #341814;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    min-height: 100vh; padding: 20px 16px 56px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+  .navbar {
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+    color: #fff; border-radius: 6px; padding: 20px 24px;
+    display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px;
+    box-shadow: var(--shadow);
+  }
+  .navbar-eyebrow { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; opacity: 0.65; font-family: "IBM Plex Mono", monospace; margin-bottom: 4px; }
+  .navbar h1 { font-family: "Fraunces", Georgia, serif; font-size: 24px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .navbar .navsub { font-size: 12.5px; opacity: 0.8; margin-top: 5px; font-family: "IBM Plex Mono", monospace; }
+  .navbar .date { font-size: 12.5px; opacity: 0.75; font-family: "IBM Plex Mono", monospace; text-align: right; }
+
+  .dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .span-1 { grid-column: span 1; }
+  .span-2 { grid-column: span 2; }
+  .span-4 { grid-column: span 4; }
+  @media (max-width: 860px) { .dashboard { grid-template-columns: repeat(2, 1fr); } .span-4 { grid-column: span 2; } }
+  @media (max-width: 520px) { .dashboard { grid-template-columns: 1fr; } .span-1, .span-2, .span-4 { grid-column: span 1; } }
+
+  .section-eyebrow {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-faint); padding: 4px 2px 0; display: flex; align-items: center; gap: 10px;
+  }
+  .section-eyebrow::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+  .tile {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    box-shadow: var(--shadow); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .tile-label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft); }
+
+  .stat-num { font-family: "IBM Plex Mono", monospace; font-size: 34px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--accent-2); line-height: 1; }
+  .stat-sub { font-size: 12.5px; color: var(--ink-soft); }
+  .stat-bar { height: 7px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; margin-top: 2px; }
+  .stat-bar-fill { height: 100%; background: var(--accent-2); border-radius: 999px; width: 0%; transition: width 0.4s ease; }
+  @media (prefers-reduced-motion: reduce) { .stat-bar-fill { transition: none; } }
+  .history { display: flex; gap: 4px; align-items: flex-end; flex: 1; }
+  .history .day { flex: 1; height: 30px; border-radius: 3px; background: var(--surface-soft); }
+  .history .day[data-ratio="full"] { background: var(--success); }
+  .history .day[data-ratio="mid"] { background: var(--accent-2); opacity: 0.6; }
+  .history .day[data-ratio="low"] { background: var(--accent-2); opacity: 0.28; }
+  .history .day.today { box-shadow: inset 0 0 0 2px var(--accent-dark); }
+
+  .chk-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; -webkit-tap-highlight-color: transparent; overflow: hidden; }
+  .chk-box { flex: none; width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--ink-faint); display: flex; align-items: center; justify-content: center; }
+  .chk-box svg { width: 11px; height: 11px; opacity: 0; }
+  .chk-box.done { background: var(--success); border-color: var(--success); }
+  .chk-box.done svg { opacity: 1; }
+  .chk-emoji { font-size: 15px; }
+  .chk-text { font-size: 14px; font-weight: 500; }
+  .chk-row:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+
+  .content-head { display: flex; align-items: center; gap: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .content-head .title { font-size: 15px; font-weight: 600; }
+  .content-head .emoji { font-size: 17px; }
+  .content-body { overflow: hidden; }
+
+  button.btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--accent);
+    border-radius: 5px; padding: 6px 12px; font-size: 12.5px; font-weight: 600; font-family: inherit; cursor: pointer;
+  }
+  button.btn:hover { background: var(--accent-wash); }
+  button.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.btn.primary:hover { opacity: 0.92; }
+
+  a.btn-link {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff;
+    border-radius: 5px; padding: 8px 14px; font-size: 13px; font-weight: 600; text-decoration: none;
+  }
+  a.btn-link:hover { opacity: 0.9; }
+
+  .poem-title { font-family: "Fraunces", Georgia, serif; font-size: 18px; font-weight: 600; margin: 4px 0 0; }
+  .poem-author { font-size: 12px; color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; margin-bottom: 6px; }
+  .poem-body { font-family: "Fraunces", Georgia, serif; font-size: 15px; line-height: 1.7; white-space: pre-line; }
+  .verse-body { font-family: "Fraunces", Georgia, serif; font-size: 15.5px; line-height: 1.7; font-style: italic; }
+  .verse-ref { font-size: 12.5px; color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; font-style: normal; margin-top: 4px; }
+
+  .video-card {
+    position: relative; border-radius: 6px; overflow: hidden;
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent)); color: #fff;
+    padding: 22px 18px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; text-align: center; min-height: 110px;
+  }
+  .video-play { width: 46px; height: 46px; border-radius: 50%; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; }
+  .video-play svg { width: 18px; height: 18px; }
+  .video-card .vc-title { font-weight: 600; font-size: 15px; }
+  .video-card .vc-sub { font-size: 12px; opacity: 0.85; }
+  .stretch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 6px; margin-top: 4px; }
+  .stretch-row { display: flex; justify-content: space-between; font-size: 13.5px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .stretch-row .dur { font-family: "IBM Plex Mono", monospace; color: var(--ink-soft); font-size: 12.5px; }
+  .note { font-size: 11.5px; color: var(--ink-faint); }
+
+  /* ---------- Strength tile ---------- */
+  .split-badge { display: inline-block; background: var(--accent-2-wash); color: var(--accent-2); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 999px; }
+  .lift-name { font-family: "Fraunces", Georgia, serif; font-size: 19px; font-weight: 600; margin-top: 8px; }
+  .lift-scheme { font-size: 13.5px; color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; margin-top: 2px; }
+  .lift-note { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
+  .log-row { display: flex; gap: 8px; margin-top: 12px; }
+  .log-row input {
+    flex: 1; min-width: 0; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 5px;
+    padding: 8px 10px; font-size: 14px; color: var(--ink); font-family: "IBM Plex Mono", monospace;
+  }
+  .lift-delta { font-size: 12.5px; color: var(--accent); font-weight: 600; margin-top: 8px; font-family: "IBM Plex Mono", monospace; }
+  .lift-delta.neg { color: var(--bad); }
+
+  /* ---------- Cardio / Norwegian 4x4 ---------- */
+  .cd-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+  .cd-panel { background: var(--surface-soft); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-top: 4px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .cd-kind { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 999px; }
+  .cd-kind.high { background: var(--accent-2-wash); color: var(--accent-2); }
+  .cd-kind.low { background: var(--accent-wash); color: var(--accent); }
+  .cd-phase { font-size: 15px; font-weight: 600; }
+  .cd-clock { font-family: "IBM Plex Mono", monospace; font-size: 40px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; }
+  .cd-segments { display: flex; gap: 3px; width: 100%; }
+  .cd-seg { flex: 1; height: 6px; border-radius: 999px; background: var(--border); }
+  .cd-seg.done { background: var(--success); }
+  .cd-seg.now.high { background: var(--accent-2); }
+  .cd-seg.now.low { background: var(--accent); }
+  .cd-controls { display: flex; gap: 8px; }
+  .cd-status { font-size: 12.5px; color: var(--success); font-weight: 600; }
+
+  .xw-link-card {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--accent-wash); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px;
+  }
+  .xw-link-card .xw-lc-title { font-weight: 600; font-size: 14px; }
+  .xw-link-card .xw-lc-sub { font-size: 12px; color: var(--ink-soft); }
+  .xw-grid { display: grid; grid-template-columns: repeat(5, 36px); grid-template-rows: repeat(5, 36px); gap: 3px; }
+  .xw-cell { position: relative; }
+  .xw-cell.blocked { background: transparent; }
+  .xw-cell input {
+    width: 100%; height: 100%; text-align: center; font-size: 16px; font-weight: 600; text-transform: uppercase;
+    background: var(--surface-soft); border: 1px solid var(--border); border-radius: 3px;
+    color: var(--ink); padding: 0; font-family: "IBM Plex Mono", monospace;
+  }
+  .xw-cell input:focus { border-color: var(--accent); outline: none; }
+  .xw-cell input.correct { background: var(--success-wash); border-color: var(--success); }
+  .xw-cell input.incorrect { border-color: var(--bad); }
+  .xw-num { position: absolute; top: 1px; left: 2px; font-size: 8px; color: var(--ink-faint); font-family: "IBM Plex Mono", monospace; pointer-events: none; }
+  .xw-clues { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; }
+  .xw-clues b { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-top: 6px; }
+  .xw-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .xw-actions { display: flex; gap: 8px; align-items: center; }
+  .xw-status { font-size: 12.5px; color: var(--success); font-weight: 600; }
+
+  .fr-level { display: inline-block; background: var(--accent-2-wash); color: var(--accent-2); font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
+  .fr-title { font-weight: 600; font-size: 15px; margin: 2px 0 4px; }
+  .fr-text { font-size: 14.5px; line-height: 1.6; }
+  .fr-grammar { font-size: 12.5px; background: var(--surface-soft); border-left: 3px solid var(--accent); padding: 7px 10px; margin-top: 8px; border-radius: 0 4px 4px 0; color: var(--ink-soft); }
+  .fr-grammar b { color: var(--ink); }
+  .fr-translation { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border); }
+  .fr-translation.hidden { display: none; }
+  .fr-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .fr-vocab { display: flex; flex-direction: column; }
+  .fr-vocab-row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .fr-vocab-row:last-child { border-bottom: none; }
+  .fr-vocab-row .fr-word { font-weight: 500; }
+  .fr-vocab-row .fr-en { color: var(--ink-soft); }
+
+  .fact-text { font-size: 14px; line-height: 1.55; }
+  .fact-actions { display: flex; justify-content: flex-end; }
+
+  #tile-completed { display: none; }
+  #tile-completed.show { display: flex; }
+  .done-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .done-chip {
+    display: flex; align-items: center; gap: 6px; background: var(--surface-soft); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 10px 5px 8px; font-size: 12.5px; cursor: pointer;
+  }
+  .done-chip:hover { background: var(--success-wash); }
+  .done-chip .dc-check { color: var(--success); font-size: 13px; }
+  .done-chip .dc-text { color: var(--ink-soft); text-decoration: line-through; }
+</style>
+
+<div class="page">
+  <div class="navbar">
+    <div>
+      <div class="navbar-eyebrow">Daily Briefing</div>
+      <h1 id="greeting">Good morning.</h1>
+      <div class="navsub" id="navSub"></div>
+    </div>
+    <div class="date" id="dateLine"></div>
+  </div>
+
+  <div class="dashboard">
+    <div class="tile span-1">
+      <div class="tile-label">Today</div>
+      <div class="stat-num"><span id="doneCount">0</span><span style="font-size:16px;color:var(--ink-faint);">/<span id="totalCount">14</span></span></div>
+      <div class="stat-bar"><div class="stat-bar-fill" id="barFill"></div></div>
+    </div>
+    <div class="tile span-1">
+      <div class="tile-label">Streak</div>
+      <div class="stat-num" id="streakNum">0</div>
+      <div class="stat-sub">days complete</div>
+    </div>
+    <div class="tile span-2">
+      <div class="tile-label">Last 14 days</div>
+      <div class="history" id="history"></div>
+    </div>
+
+    <div class="section-eyebrow span-4">Physical performance</div>
+    <div class="tile span-2" id="tile-strength"></div>
+    <div class="tile span-2" id="tile-cardio"></div>
+    <div class="tile span-4" id="tile-stretch"></div>
+
+    <div class="section-eyebrow span-4">Mind &amp; spirit</div>
+    <div class="tile span-2" id="tile-poem"></div>
+    <div class="tile span-2" id="tile-verse"></div>
+    <div class="tile span-2" id="tile-french"></div>
+    <div class="tile span-2" id="tile-crossword"></div>
+    <div class="tile span-2" id="tile-fact"></div>
+    <div class="tile span-2" id="tile-checklist"></div>
+
+    <div class="tile span-4" id="tile-completed">
+      <div class="tile-label">Completed today</div>
+      <div class="done-list" id="doneList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = "morning-ledger-v6";
+  var IDX_KEY = "morning-ledger-idx-v6";
+  var STRENGTH_LOG_KEY = "morning-ledger-strength-log-v1";
+
+  var ALL_TASK_IDS = ["make-bed","shower","pray","book","journal","poem","french","crossword","fact","stretch","lift","cardio","diet","creatine"];
+
+  var TASK_META = {
+    "make-bed": { emoji: "🛏️", label: "Make bed" },
+    "shower":   { emoji: "🚿", label: "Shower" },
+    "pray":     { emoji: "🙏", label: "Pray" },
+    "book":     { emoji: "📖", label: "Read a book" },
+    "journal":  { emoji: "📓", label: "Journal" },
+    "poem":     { emoji: "📜", label: "Read a poem" },
+    "french":   { emoji: "🇫🇷", label: "20 min of French" },
+    "crossword":{ emoji: "🧩", label: "Crossword" },
+    "fact":     { emoji: "💡", label: "Learn something new" },
+    "stretch":  { emoji: "🤸", label: "Morning stretch" },
+    "lift":     { emoji: "🏋️", label: "Strength training" },
+    "cardio":   { emoji: "🏃", label: "Cardio — Norwegian 4×4" },
+    "diet":     { emoji: "🥗", label: "Dial in my diet" },
+    "creatine": { emoji: "💊", label: "Creatine" }
+  };
+
+  var FACTS = [
+    "Octopuses have three hearts, and two of them stop beating when they swim.",
+    "Honey never spoils — sealed jars found in ancient Egyptian tombs are still edible.",
+    "A group of flamingos is called a flamboyance.",
+    "The Eiffel Tower grows about 6 inches taller in summer as the iron expands.",
+    "Bananas are botanically berries, but strawberries aren't.",
+    "Wombat droppings are cube-shaped, which keeps them from rolling away.",
+    "There are more possible chess games than atoms in the observable universe.",
+    "Sea otters hold hands while sleeping so they don't drift apart.",
+    "The shortest war in history lasted about 38 minutes (Britain vs. Zanzibar, 1896).",
+    "Sharks existed before trees — sharks are about 400 million years old.",
+    "A day on Venus is longer than a year on Venus.",
+    "Scotland's national animal is the unicorn.",
+    "Cows have best friends and get stressed when separated from them.",
+    "The dot over a lowercase 'i' or 'j' has a name: a tittle.",
+    "Butterflies taste with their feet.",
+    "Hot water can freeze faster than cold water under certain conditions — it's called the Mpemba effect.",
+    "A single cloud can weigh more than a million pounds.",
+    "Jupiter's moon Europa has an ocean with likely twice as much water as Earth.",
+    "Slugs have four noses.",
+    "The world's oldest known recipe is for beer, from ancient Sumeria.",
+    "Wood frogs can survive being frozen solid through winter.",
+    "The Great Wall of China is not visible from space with the naked eye — that's a myth.",
+    "Starfish don't have brains or blood.",
+    "Some turtles breathe through their butts.",
+    "Venus is the only planet that spins clockwise.",
+    "The longest common word without a vowel is 'rhythms'.",
+    "Elephants are one of the few animals that can recognize themselves in a mirror.",
+    "A bolt of lightning is roughly five times hotter than the surface of the sun.",
+    "Koalas have fingerprints nearly identical to humans."
+  ];
+
+  var POEMS = [
+    { title: "The Road Not Taken", author: "Robert Frost",
+      body: "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth;\n\nThen took the other, as just as fair,\nAnd having perhaps the better claim,\nBecause it was grassy and wanted wear;\nThough as for that the passing there\nHad worn them really about the same,\n\nAnd both that morning equally lay\nIn leaves no step had trodden black.\nOh, I kept the first for another day!\nYet knowing how way leads on to way,\nI doubted if I should ever come back.\n\nI shall be telling this with a sigh\nSomewhere ages and ages hence:\nTwo roads diverged in a wood, and I—\nI took the one less traveled by,\nAnd that has made all the difference." },
+    { title: "The Tyger", author: "William Blake",
+      body: "Tyger Tyger, burning bright,\nIn the forests of the night,\nWhat immortal hand or eye\nCould frame thy fearful symmetry?\n\nIn what distant deeps or skies\nBurnt the fire of thine eyes?\nOn what wings dare he aspire?\nWhat the hand dare seize the fire?\n\nAnd what shoulder, and what art,\nCould twist the sinews of thy heart?\nAnd when thy heart began to beat,\nWhat dread hand? and what dread feet?\n\nWhat the hammer? what the chain?\nIn what furnace was thy brain?\nWhat the anvil? What dread grasp\nDare its deadly terrors clasp?\n\nWhen the stars threw down their spears,\nAnd water'd heaven with their tears,\nDid he smile his work to see?\nDid he who made the Lamb make thee?\n\nTyger Tyger, burning bright,\nIn the forests of the night,\nWhat immortal hand or eye,\nDare frame thy fearful symmetry?" },
+    { title: "Nothing Gold Can Stay", author: "Robert Frost",
+      body: "Nature's first green is gold,\nHer hardest hue to hold.\nHer early leaf's a flower;\nBut only so an hour.\nThen leaf subsides to leaf.\nSo Eden sank to grief,\nSo dawn goes down to day.\nNothing gold can stay." },
+    { title: "“Hope” is the thing with feathers", author: "Emily Dickinson",
+      body: "“Hope” is the thing with feathers -\nThat perches in the soul -\nAnd sings the tune without the words -\nAnd never stops - at all -\n\nAnd sweetest - in the Gale - is heard -\nAnd sore must be the storm -\nThat could abash the little Bird\nThat kept so many warm -\n\nI've heard it in the chillest land -\nAnd on the strangest Sea -\nYet - never - in Extremity,\nIt asked a crumb - of me." },
+    { title: "Fire and Ice", author: "Robert Frost",
+      body: "Some say the world will end in fire,\nSome say in ice.\nFrom what I've tasted of desire\nI hold with those who favor fire.\nBut if it had to perish twice,\nI think I know enough of hate\nTo say that for destruction ice\nIs also great\nAnd would suffice." }
+  ];
+
+  var VERSES = [
+    { ref: "John 3:16 (KJV)", text: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life." },
+    { ref: "Philippians 4:6–7 (KJV)", text: "Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus." },
+    { ref: "Psalm 23:1 (KJV)", text: "The LORD is my shepherd; I shall not want." },
+    { ref: "Proverbs 3:5–6 (KJV)", text: "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths." },
+    { ref: "Isaiah 41:10 (KJV)", text: "Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee; yea, I will uphold thee with the right hand of my righteousness." },
+    { ref: "Jeremiah 29:11 (KJV)", text: "For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end." },
+    { ref: "Romans 8:28 (KJV)", text: "And we know that all things work together for good to them that love God, to them who are the called according to his purpose." }
+  ];
+
+  var XWORDS = [
+    { down: { word: "BRAIN", clue: "Where your thoughts live" },
+      across: [
+        { word: "ABS", clue: "Core muscles, informally" },
+        { word: "CAT", clue: "Common house pet" },
+        { word: "ANY", clue: "Some, in a general sense" }
+      ] },
+    { down: { word: "OCEAN", clue: "Vast body of salt water" },
+      across: [
+        { word: "TOE", clue: "Foot digit" },
+        { word: "TEN", clue: "Number after nine" },
+        { word: "INN", clue: "Small roadside hotel" }
+      ] },
+    { down: { word: "APPLE", clue: "Fruit that keeps the doctor away" },
+      across: [
+        { word: "CAT", clue: "Common house pet" },
+        { word: "OPT", clue: "Choose" },
+        { word: "BEE", clue: "Buzzing garden visitor" }
+      ] }
+  ];
+
+  var FRENCH = [
+    { title: "Le télétravail", level: "B1",
+      fr: "Bien qu'il y ait des avantages certains au télétravail, comme la flexibilité des horaires, il ne faut pas en négliger les revers, notamment l'isolement social qu'il peut engendrer. Il est essentiel que chacun trouve un équilibre entre vie professionnelle et vie personnelle, quitte à revoir son organisation chaque mois.",
+      en: "Although remote work has certain advantages, like flexible hours, its downsides shouldn't be overlooked — notably the social isolation it can create. It's essential that everyone find a balance between professional and personal life, even if it means revisiting their setup every month.",
+      grammar: "<b>Bien que</b> + subjunctive introduces a concession (\"even though\"). Notice <i>il y ait</i>, not <i>il y a</i>.",
+      vocab: [["bien que", "although (+ subjunctive)"], ["un revers", "a downside"], ["négliger", "to overlook / neglect"], ["engendrer", "to bring about"], ["quitte à", "even if it means"]] },
+    { title: "Le changement climatique", level: "B1/B2",
+      fr: "Face au changement climatique, de plus en plus de gens repensent leur mode de vie. Certains réduisent leur consommation de viande, d'autres privilégient les transports en commun. Encore faut-il que ces gestes individuels s'accompagnent de politiques publiques ambitieuses, sans quoi leur portée restera limitée.",
+      en: "Faced with climate change, more and more people are rethinking their way of life. Some cut down on meat, others favor public transport. Still, these individual actions need to be matched by ambitious public policy, or their impact will stay limited.",
+      grammar: "<b>Encore faut-il que</b> + subjunctive means \"that said, it's still necessary that...\" — a common way to add a caveat in formal argument.",
+      vocab: [["repenser", "to rethink"], ["privilégier", "to favor / prioritize"], ["les transports en commun", "public transportation"], ["s'accompagner de", "to be accompanied by"], ["la portée", "the reach / impact"]] },
+    { title: "Une drôle de surprise", level: "B2",
+      fr: "Quand mon collègue m'a annoncé qu'il démissionnait du jour au lendemain, j'ai été pris au dépourvu. Ce n'est pas tous les jours qu'on tombe des nues comme ça. Cela dit, il faut avouer qu'il avait déjà laissé entendre, à plusieurs reprises, qu'il songeait à changer de voie.",
+      en: "When my colleague told me he was quitting overnight, I was caught completely off guard. It's not every day you're that blindsided. That said, I have to admit he'd already hinted, more than once, that he was thinking about a career change.",
+      grammar: "<b>Idiomatic expressions</b>: <i>tomber des nues</i> (\"to fall from the clouds\") means to be totally stunned; <i>du jour au lendemain</i> = overnight, out of nowhere.",
+      vocab: [["être pris au dépourvu", "to be caught off guard"], ["tomber des nues", "to be utterly stunned"], ["du jour au lendemain", "overnight / abruptly"], ["laisser entendre", "to hint"], ["changer de voie", "to change career path"]] }
+  ];
+
+  var STRETCH_MOVES = [
+    ["Neck rolls", "30 sec"],
+    ["Cat-cow", "45 sec"],
+    ["Standing forward fold", "30 sec"],
+    ["Quad stretch, each side", "30 sec"],
+    ["Child's pose", "45 sec"]
+  ];
+
+  // Classic 6-day push/pull/legs split, Sunday active recovery
+  var STRENGTH_PROGRAM = [
+    { split: "Recovery", lift: "Mobility & easy walking", scheme: "20–30 min, easy effort", note: "No lifting today — let the week's primary lifts recover.", log: false },
+    { split: "Push", lift: "Barbell bench press", scheme: "5 sets × 5 reps", note: "Match or beat last logged top set.", log: true },
+    { split: "Pull", lift: "Conventional deadlift", scheme: "3 sets × 5 reps", note: "Add load only if last session felt crisp, not grinding.", log: true },
+    { split: "Legs", lift: "Back squat", scheme: "5 sets × 5 reps", note: "Depth over load — full range on every rep.", log: true },
+    { split: "Push", lift: "Overhead press", scheme: "5 sets × 5 reps", note: "Strict form, no leg drive.", log: true },
+    { split: "Pull", lift: "Weighted pull-ups", scheme: "4 sets × 6 reps", note: "Add weight before adding reps.", log: true },
+    { split: "Legs", lift: "Front squat or leg press", scheme: "4 sets × 8 reps", note: "Higher-rep day — control the eccentric.", log: true }
+  ];
+
+  // Norwegian 4x4: warm-up, 4 x (4 min hard / 3 min easy), cool-down — ~40 min, VO2max protocol
+  var CARDIO_PHASES = [
+    { label: "Warm-up", seconds: 600, kind: "low" },
+    { label: "Interval 1 of 4", seconds: 240, kind: "high" },
+    { label: "Active recovery", seconds: 180, kind: "low" },
+    { label: "Interval 2 of 4", seconds: 240, kind: "high" },
+    { label: "Active recovery", seconds: 180, kind: "low" },
+    { label: "Interval 3 of 4", seconds: 240, kind: "high" },
+    { label: "Active recovery", seconds: 180, kind: "low" },
+    { label: "Interval 4 of 4", seconds: 240, kind: "high" },
+    { label: "Cool-down", seconds: 300, kind: "low" }
+  ];
+
+  function todayKey(d) {
+    d = d || new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+  function dayHash(k) {
+    var h = 0;
+    for (var i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) >>> 0;
+    return h;
+  }
+  function loadJSON(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch (e) { return {}; } }
+  function saveJSON(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return c === "&" ? "&amp;" : c === "<" ? "&lt;" : "&gt;"; }); }
+  function fmtClock(s) { var m = Math.floor(s / 60), sec = s % 60; return m + ":" + String(sec).padStart(2, "0"); }
+
+  var store = loadJSON(STORAGE_KEY);
+  var key = todayKey();
+  if (!store[key]) store[key] = {};
+  var todayState = store[key];
+
+  var idxStore = loadJSON(IDX_KEY);
+  function pickIndex(name, length) {
+    var k = name + ":" + key;
+    if (typeof idxStore[k] === "number") return idxStore[k];
+    var idx = dayHash(k) % length;
+    idxStore[k] = idx;
+    saveJSON(IDX_KEY, idxStore);
+    return idx;
+  }
+  var factIdx = pickIndex("fact", FACTS.length);
+  var poemIdx = pickIndex("poem", POEMS.length);
+  var verseIdx = pickIndex("verse", VERSES.length);
+  var xwIdx = pickIndex("xw", XWORDS.length);
+  var frIdx = pickIndex("fr", FRENCH.length);
+
+  var hour = new Date().getHours();
+  document.getElementById("greeting").textContent = hour < 12 ? "Good morning." : hour < 18 ? "Good afternoon." : "Good evening.";
+  document.getElementById("dateLine").textContent = new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+
+  // ==================== disappear-on-check registry ====================
+  var registry = {};
+  var doneListEl = document.getElementById("doneList");
+  var completedTile = document.getElementById("tile-completed");
+
+  function register(id, unitEl) { registry[id] = { unit: unitEl }; }
+  function updateCompletedVisibility() { completedTile.classList.toggle("show", doneListEl.children.length > 0); }
+
+  function addChip(id) {
+    var meta = TASK_META[id];
+    var chip = document.createElement("div");
+    chip.className = "done-chip";
+    chip.setAttribute("data-id", id);
+    chip.setAttribute("role", "button");
+    chip.setAttribute("tabindex", "0");
+    chip.title = "Mark not done";
+    chip.innerHTML = '<span class="dc-check">✓</span><span>' + meta.emoji + '</span><span class="dc-text">' + esc(meta.label) + '</span>';
+    chip.addEventListener("click", function () { toggleTask(id); });
+    chip.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggleTask(id); } });
+    doneListEl.appendChild(chip);
+    updateCompletedVisibility();
+  }
+  function removeChip(id) {
+    var chip = doneListEl.querySelector('.done-chip[data-id="' + id + '"]');
+    if (chip) chip.remove();
+    updateCompletedVisibility();
+  }
+
+  function collapseUnit(el, cb) {
+    el.style.maxHeight = el.scrollHeight + "px";
+    el.style.overflow = "hidden";
+    el.style.transition = "none";
+    void el.offsetHeight;
+    requestAnimationFrame(function () {
+      el.style.transition = "max-height 0.3s ease, opacity 0.25s ease, margin 0.3s ease, padding 0.3s ease";
+      el.style.maxHeight = "0px"; el.style.opacity = "0";
+      el.style.marginTop = "0px"; el.style.marginBottom = "0px";
+      el.style.paddingTop = "0px"; el.style.paddingBottom = "0px";
+    });
+    setTimeout(function () { el.style.display = "none"; if (cb) cb(); }, 320);
+  }
+  function expandUnit(el) {
+    el.style.display = ""; el.style.transition = ""; el.style.maxHeight = ""; el.style.opacity = "";
+    el.style.marginTop = ""; el.style.marginBottom = ""; el.style.paddingTop = ""; el.style.paddingBottom = ""; el.style.overflow = "";
+  }
+  function setCheckboxVisual(id, done) {
+    document.querySelectorAll('[data-checkbox-for="' + id + '"]').forEach(function (box) { box.classList.toggle("done", done); });
+  }
+  function toggleTask(id) {
+    var nowDone = !todayState[id];
+    todayState[id] = nowDone;
+    saveJSON(STORAGE_KEY, store);
+    setCheckboxVisual(id, nowDone);
+    var reg = registry[id];
+    if (nowDone) {
+      if (reg) collapseUnit(reg.unit, function () { addChip(id); });
+      else addChip(id);
+    } else {
+      removeChip(id);
+      if (reg) expandUnit(reg.unit);
+    }
+    renderProgress();
+    renderHistory();
+  }
+  function checkboxHTML(id) {
+    return '<div class="chk-box' + (todayState[id] ? ' done' : '') + '" data-checkbox-for="' + id + '"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>';
+  }
+
+  (function () {
+    var el = document.getElementById("tile-checklist");
+    var items = ["make-bed", "shower", "book", "journal", "diet", "creatine"];
+    var html = '<div class="tile-label">Checklist</div><div id="checklist-rows">';
+    items.forEach(function (id) {
+      var m = TASK_META[id];
+      html += '<div class="chk-row" data-id="' + id + '" role="checkbox" tabindex="0" aria-checked="' + !!todayState[id] + '">' +
+        checkboxHTML(id) + '<span class="chk-emoji">' + m.emoji + '</span><span class="chk-text">' + esc(m.label) + '</span></div>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+    items.forEach(function (id) {
+      var row = el.querySelector('.chk-row[data-id="' + id + '"]');
+      register(id, row);
+      row.addEventListener("click", function () { toggleTask(id); });
+      row.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggleTask(id); } });
+    });
+  })();
+
+  function contentHead(id) {
+    var m = TASK_META[id];
+    return '<div class="content-head" data-id="' + id + '" role="checkbox" tabindex="0" aria-checked="' + !!todayState[id] + '">' +
+      checkboxHTML(id) + '<span class="emoji">' + m.emoji + '</span><span class="title">' + m.label + '</span></div>';
+  }
+  function wireContentHead(tileEl, id) {
+    var head = tileEl.querySelector(".content-head");
+    register(id, tileEl);
+    head.addEventListener("click", function () { toggleTask(id); });
+    head.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggleTask(id); } });
+  }
+
+  // ---- Strength tile ----
+  (function () {
+    var tile = document.getElementById("tile-strength");
+    var weekday = new Date().getDay();
+    var program = STRENGTH_PROGRAM[weekday];
+    var strengthLog = loadJSON(STRENGTH_LOG_KEY);
+    var prevKey = todayKey(new Date(Date.now() - 7 * 86400000));
+    var prevEntry = strengthLog[prevKey];
+    var todayEntry = strengthLog[key];
+
+    var html = contentHead("lift") + '<div class="content-body">';
+    html += '<span class="split-badge">' + esc(program.split) + '</span>';
+    html += '<div class="lift-name">' + esc(program.lift) + '</div>';
+    html += '<div class="lift-scheme">' + esc(program.scheme) + '</div>';
+    html += '<div class="lift-note">' + esc(program.note) + '</div>';
+    if (program.log) {
+      html += '<div class="log-row"><input type="number" inputmode="decimal" id="strengthInput" placeholder="Top set weight (lb)" value="' + (todayEntry ? todayEntry.weight : '') + '">' +
+        '<button class="btn primary" id="strengthSave">Log</button></div>';
+      html += '<div class="lift-delta" id="liftDelta"></div>';
+    }
+    html += '</div>';
+    tile.innerHTML = html;
+    wireContentHead(tile, "lift");
+
+    if (program.log) {
+      var input = tile.querySelector("#strengthInput");
+      var deltaEl = tile.querySelector("#liftDelta");
+      var matchingPrev = (prevEntry && prevEntry.lift === program.lift) ? prevEntry : null;
+
+      function renderDelta() {
+        var val = parseFloat(input.value);
+        if (!matchingPrev) { deltaEl.textContent = ""; return; }
+        if (!val) { deltaEl.textContent = "Last time: " + matchingPrev.weight + " lb"; deltaEl.classList.remove("neg"); return; }
+        var diff = Math.round((val - matchingPrev.weight) * 10) / 10;
+        deltaEl.textContent = (diff > 0 ? "+" : "") + diff + " lb vs last time (" + matchingPrev.weight + " lb)";
+        deltaEl.classList.toggle("neg", diff < 0);
+      }
+      renderDelta();
+      input.addEventListener("input", renderDelta);
+      tile.querySelector("#strengthSave").addEventListener("click", function () {
+        var val = parseFloat(input.value);
+        if (!val) return;
+        strengthLog[key] = { lift: program.lift, weight: val };
+        saveJSON(STRENGTH_LOG_KEY, strengthLog);
+        renderDelta();
+      });
+    }
+  })();
+
+  // ---- Cardio / Norwegian 4x4 tile ----
+  (function () {
+    var tile = document.getElementById("tile-cardio");
+    var html = contentHead("cardio") + '<div class="content-body">';
+    html += '<div class="cd-desc">4 × 4 minutes at 85–95% max heart rate (hard, but sustainable), with 3 minutes of easy active recovery between rounds. ~40 min total including warm-up and cool-down — one of the best-studied protocols for raising VO<sub>2</sub>max.</div>';
+    html += '<div class="cd-panel">';
+    html += '<span class="cd-kind low" id="cdKind">Ready</span>';
+    html += '<div class="cd-phase" id="cdPhase">' + CARDIO_PHASES[0].label + '</div>';
+    html += '<div class="cd-clock" id="cdClock">' + fmtClock(CARDIO_PHASES[0].seconds) + '</div>';
+    html += '<div class="cd-segments" id="cdSegments"></div>';
+    html += '<div class="cd-controls"><button class="btn primary" id="cdStart">Start</button><button class="btn" id="cdPause" disabled>Pause</button><button class="btn" id="cdReset">Reset</button></div>';
+    html += '<div class="cd-status" id="cdStatus"></div>';
+    html += '</div></div>';
+    tile.innerHTML = html;
+    wireContentHead(tile, "cardio");
+
+    var segWrap = tile.querySelector("#cdSegments");
+    CARDIO_PHASES.forEach(function () {
+      var seg = document.createElement("div");
+      seg.className = "cd-seg";
+      segWrap.appendChild(seg);
+    });
+    var segEls = segWrap.querySelectorAll(".cd-seg");
+
+    var phaseIdx = 0, remaining = CARDIO_PHASES[0].seconds, timerId = null, audioCtx = null;
+
+    function getCtx() {
+      if (!audioCtx) {
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audioCtx = null; }
+      }
+      return audioCtx;
+    }
+    function beep(freq, dur) {
+      var ctx = getCtx();
+      if (!ctx) return;
+      try {
+        var osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.frequency.value = freq;
+        osc.connect(gain); gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+        osc.start(); osc.stop(ctx.currentTime + dur);
+      } catch (e) {}
+    }
+
+    function updateUI() {
+      var phase = CARDIO_PHASES[phaseIdx];
+      tile.querySelector("#cdPhase").textContent = phase.label;
+      tile.querySelector("#cdClock").textContent = fmtClock(remaining);
+      var kindEl = tile.querySelector("#cdKind");
+      kindEl.textContent = phase.kind === "high" ? "Hard effort" : (phaseIdx === 0 ? "Warm-up" : phaseIdx === CARDIO_PHASES.length - 1 ? "Cool-down" : "Recovery");
+      kindEl.className = "cd-kind " + phase.kind;
+      segEls.forEach(function (seg, i) {
+        seg.classList.toggle("done", i < phaseIdx);
+        seg.classList.remove("now", "high", "low");
+        if (i === phaseIdx) seg.classList.add("now", phase.kind);
+      });
+    }
+    function stopTimer() {
+      running = false;
+      clearInterval(timerId);
+      tile.querySelector("#cdStart").disabled = false;
+      tile.querySelector("#cdPause").disabled = true;
+    }
+    var running = false;
+    function tick() {
+      remaining--;
+      if (remaining > 0 && remaining <= 3) beep(880, 0.12);
+      if (remaining <= 0) {
+        phaseIdx++;
+        if (phaseIdx >= CARDIO_PHASES.length) {
+          stopTimer();
+          tile.querySelector("#cdStatus").textContent = "Session complete — nice work.";
+          phaseIdx = CARDIO_PHASES.length - 1;
+          remaining = 0;
+          updateUI();
+          if (!todayState.cardio) toggleTask("cardio");
+          return;
+        }
+        remaining = CARDIO_PHASES[phaseIdx].seconds;
+        beep(CARDIO_PHASES[phaseIdx].kind === "high" ? 1200 : 600, 0.35);
+      }
+      updateUI();
+    }
+    tile.querySelector("#cdStart").addEventListener("click", function () {
+      if (running) return;
+      running = true;
+      tile.querySelector("#cdStart").disabled = true;
+      tile.querySelector("#cdPause").disabled = false;
+      tile.querySelector("#cdStatus").textContent = "";
+      timerId = setInterval(tick, 1000);
+    });
+    tile.querySelector("#cdPause").addEventListener("click", function () { stopTimer(); });
+    tile.querySelector("#cdReset").addEventListener("click", function () {
+      stopTimer();
+      phaseIdx = 0; remaining = CARDIO_PHASES[0].seconds;
+      tile.querySelector("#cdStatus").textContent = "";
+      updateUI();
+    });
+    updateUI();
+  })();
+
+  // ---- Poem tile ----
+  (function () {
+    var p = POEMS[poemIdx];
+    var tile = document.getElementById("tile-poem");
+    tile.innerHTML = contentHead("poem") +
+      '<div class="content-body"><div class="poem-title">' + esc(p.title) + '</div>' +
+      '<div class="poem-author">' + esc(p.author) + '</div>' +
+      '<div class="poem-body">' + esc(p.body) + '</div>' +
+      '<div style="margin-top:10px;"><a class="btn-link" href="https://www.poetryfoundation.org/poems/poem-of-the-day" target="_blank" rel="noopener">Today’s actual pick on Poetry Foundation ↗</a></div>' +
+      '<div class="note" style="margin-top:8px;">Poetry Foundation blocks cross-site fetching (bot protection, no CORS) — this rotates a real, complete poem locally instead of mirroring their page.</div></div>';
+    wireContentHead(tile, "poem");
+  })();
+
+  // ---- Verse tile ----
+  (function () {
+    var v = VERSES[verseIdx];
+    var tile = document.getElementById("tile-verse");
+    tile.innerHTML = contentHead("pray") +
+      '<div class="content-body"><div class="verse-body">“' + esc(v.text) + '”</div>' +
+      '<div class="verse-ref">' + esc(v.ref) + '</div>' +
+      '<div style="margin-top:10px;"><a class="btn-link" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener">Today’s actual pick on Bible.com ↗</a></div>' +
+      '<div class="note" style="margin-top:8px;">Bible.com blocks cross-site fetching too, and matching their exact daily pick needs their official (keyed) API. This rotates a real KJV verse from a curated list instead.</div></div>';
+    wireContentHead(tile, "pray");
+  })();
+
+  // ---- Stretch tile ----
+  (function () {
+    var tile = document.getElementById("tile-stretch");
+    var searchUrl = "https://www.youtube.com/results?search_query=" + encodeURIComponent("5 minute morning stretch routine");
+    var html = contentHead("stretch") + '<div class="content-body">';
+    html += '<div class="video-card"><div class="video-play"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"></path></svg></div>' +
+      '<div class="vc-title">5-minute morning stretch</div>' +
+      '<div class="vc-sub">A quick guided routine, plus the moves below</div>' +
+      '<a class="btn-link" href="' + searchUrl + '" target="_blank" rel="noopener">Find a video on YouTube ↗</a></div>';
+    html += '<div class="stretch-grid">';
+    STRETCH_MOVES.forEach(function (m) {
+      html += '<div class="stretch-row"><span>' + esc(m[0]) + '</span><span class="dur">' + esc(m[1]) + '</span></div>';
+    });
+    html += '</div><div class="note">Artifacts can’t embed YouTube directly (browser sandboxing) — this opens search results in a new tab instead.</div></div>';
+    tile.innerHTML = html;
+    wireContentHead(tile, "stretch");
+  })();
+
+  // ---- French tile ----
+  (function () {
+    var f = FRENCH[frIdx];
+    var tile = document.getElementById("tile-french");
+    var hasVoice = typeof window.speechSynthesis !== "undefined";
+    var html = contentHead("french") + '<div class="content-body">';
+    html += '<div class="fr-title">' + esc(f.title) + '<span class="fr-level">' + esc(f.level) + '</span></div>';
+    html += '<div class="fr-text">' + esc(f.fr) + '</div>';
+    html += '<div class="fr-grammar">' + f.grammar + '</div>';
+    html += '<div class="fr-translation hidden" data-translation>' + esc(f.en) + '</div>';
+    html += '<div class="fr-actions">';
+    if (hasVoice) html += '<button class="btn" data-act="speak">🔊 Listen</button>';
+    html += '<button class="btn" data-act="translate">Show translation</button></div>';
+    html += '<div class="tile-label" style="margin-top:10px;">Vocab &amp; expressions</div><div class="fr-vocab">';
+    f.vocab.forEach(function (v) {
+      html += '<div class="fr-vocab-row"><span class="fr-word">' + esc(v[0]) + '</span><span class="fr-en">' + esc(v[1]) + '</span></div>';
+    });
+    html += '</div></div>';
+    tile.innerHTML = html;
+    wireContentHead(tile, "french");
+
+    var speakBtn = tile.querySelector('[data-act="speak"]');
+    if (speakBtn) {
+      speakBtn.addEventListener("click", function () {
+        try {
+          window.speechSynthesis.cancel();
+          var u = new SpeechSynthesisUtterance(f.fr);
+          u.lang = "fr-FR"; u.rate = 0.9;
+          window.speechSynthesis.speak(u);
+        } catch (e) {}
+      });
+    }
+    tile.querySelector('[data-act="translate"]').addEventListener("click", function (e) {
+      var t = tile.querySelector("[data-translation]");
+      var hidden = t.classList.toggle("hidden");
+      e.currentTarget.textContent = hidden ? "Show translation" : "Hide translation";
+    });
+  })();
+
+  // ---- Crossword tile ----
+  (function () {
+    var puz = XWORDS[xwIdx];
+    var tile = document.getElementById("tile-crossword");
+    var grid = [];
+    for (var r = 0; r < 5; r++) grid.push([null, null, null, null, null]);
+    for (var r2 = 0; r2 < 5; r2++) grid[r2][2] = puz.down.word[r2];
+    var rowsForAcross = [0, 2, 4];
+    puz.across.forEach(function (a, i) {
+      var row = rowsForAcross[i];
+      grid[row][1] = a.word[0]; grid[row][2] = a.word[1]; grid[row][3] = a.word[2];
+    });
+    var numberAt = { "0,1": 1, "0,2": 2, "2,1": 3, "4,1": 4 };
+
+    var html = contentHead("crossword") + '<div class="content-body">';
+    html += '<div class="xw-link-card"><div><div class="xw-lc-title">Today’s full crossword</div><div class="xw-lc-sub">Dictionary.com — Mini, Easy &amp; Sunday puzzles</div></div>' +
+      '<a class="btn-link" href="https://www.dictionary.com/games/crossword" target="_blank" rel="noopener">Play ↗</a></div>';
+    html += '<div class="tile-label" style="margin-top:2px;">Or a quick warm-up here</div>';
+    html += '<div class="xw-row"><div class="xw-grid">';
+    for (var r = 0; r < 5; r++) {
+      for (var c = 0; c < 5; c++) {
+        var letter = grid[r][c];
+        if (letter === null) {
+          html += '<div class="xw-cell blocked"></div>';
+        } else {
+          var num = numberAt[r + "," + c];
+          html += '<div class="xw-cell">' + (num ? '<span class="xw-num">' + num + '</span>' : '') +
+            '<input maxlength="1" data-r="' + r + '" data-c="' + c + '" data-ans="' + letter + '" autocomplete="off" spellcheck="false" aria-label="Row ' + (r + 1) + ' column ' + (c + 1) + '"></div>';
+        }
+      }
+    }
+    html += '</div><div class="xw-clues"><b>Across</b>';
+    puz.across.forEach(function (a, i) {
+      var n = i === 0 ? 1 : i === 1 ? 3 : 4;
+      html += '<div>' + n + '. ' + esc(a.clue) + '</div>';
+    });
+    html += '<b>Down</b><div>2. ' + esc(puz.down.clue) + '</div></div></div>';
+    html += '<div class="xw-actions"><button class="btn" data-act="check">Check</button><button class="btn" data-act="reveal">Reveal</button><span class="xw-status" data-status></span></div></div>';
+    tile.innerHTML = html;
+    wireContentHead(tile, "crossword");
+
+    var inputs = tile.querySelectorAll(".xw-cell input");
+    inputs.forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        inp.value = inp.value.slice(-1).toUpperCase();
+        inp.classList.remove("correct", "incorrect");
+        if (inp.value) {
+          var r = +inp.dataset.r, c = +inp.dataset.c;
+          var next = tile.querySelector('.xw-cell input[data-r="' + r + '"][data-c="' + (c + 1) + '"]') ||
+                     tile.querySelector('.xw-cell input[data-r="' + (r + 1) + '"][data-c="' + c + '"]');
+          if (next) next.focus();
+        }
+      });
+    });
+    var status = tile.querySelector("[data-status]");
+    tile.querySelector('[data-act="check"]').addEventListener("click", function () {
+      var allCorrect = true;
+      inputs.forEach(function (inp) {
+        var ok = inp.value.toUpperCase() === inp.dataset.ans;
+        inp.classList.toggle("correct", ok && !!inp.value);
+        inp.classList.toggle("incorrect", !ok && !!inp.value);
+        if (!ok) allCorrect = false;
+      });
+      status.textContent = allCorrect ? "Solved!" : "Keep going";
+    });
+    tile.querySelector('[data-act="reveal"]').addEventListener("click", function () {
+      inputs.forEach(function (inp) {
+        inp.value = inp.dataset.ans; inp.classList.add("correct"); inp.classList.remove("incorrect");
+      });
+      status.textContent = "Solved!";
+    });
+  })();
+
+  // ---- Fact tile ----
+  (function () {
+    var tile = document.getElementById("tile-fact");
+    function render() {
+      tile.innerHTML = contentHead("fact") +
+        '<div class="content-body"><div class="fact-text" id="factText">' + esc(FACTS[factIdx]) + '</div>' +
+        '<div class="fact-actions"><button class="btn" id="factShuffle">Shuffle</button></div></div>';
+      wireContentHead(tile, "fact");
+      tile.querySelector("#factShuffle").addEventListener("click", function () {
+        var next = factIdx;
+        while (next === factIdx) next = Math.floor(Math.random() * FACTS.length);
+        factIdx = next;
+        render();
+      });
+    }
+    render();
+  })();
+
+  // ---- initial pass: instantly hide anything already done today ----
+  ALL_TASK_IDS.forEach(function (id) {
+    if (todayState[id]) {
+      var reg = registry[id];
+      if (reg) reg.unit.style.display = "none";
+      addChip(id);
+    }
+  });
+
+  // ---- progress / streak / history ----
+  function allTasksDone(state) { return ALL_TASK_IDS.every(function (id) { return state[id]; }); }
+  function renderProgress() {
+    var done = ALL_TASK_IDS.filter(function (id) { return todayState[id]; }).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("totalCount").textContent = ALL_TASK_IDS.length;
+    document.getElementById("barFill").style.width = Math.round((done / ALL_TASK_IDS.length) * 100) + "%";
+    document.getElementById("navSub").textContent = done + " of " + ALL_TASK_IDS.length + " priorities handled";
+  }
+  function computeStreak() {
+    var streak = 0;
+    var d = new Date();
+    if (!allTasksDone(todayState)) d.setDate(d.getDate() - 1);
+    while (true) {
+      var k = todayKey(d);
+      var dayState = store[k];
+      if (dayState && allTasksDone(dayState)) { streak++; d.setDate(d.getDate() - 1); }
+      else break;
+    }
+    return streak;
+  }
+  function renderHistory() {
+    var el = document.getElementById("history");
+    el.innerHTML = "";
+    for (var i = 13; i >= 0; i--) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var k = todayKey(d);
+      var dayState = store[k] || {};
+      var doneN = ALL_TASK_IDS.filter(function (id) { return dayState[id]; }).length;
+      var ratio = doneN === 0 ? "none" : doneN === ALL_TASK_IDS.length ? "full" : doneN >= ALL_TASK_IDS.length / 2 ? "mid" : "low";
+      var div = document.createElement("div");
+      div.className = "day" + (i === 0 ? " today" : "");
+      div.setAttribute("data-ratio", ratio);
+      div.title = d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + ": " + doneN + "/" + ALL_TASK_IDS.length;
+      el.appendChild(div);
+    }
+    var streak = computeStreak();
+    document.getElementById("streakNum").textContent = streak;
+    document.getElementById("navSub").textContent += " · " + streak + "-day streak";
+  }
+
+  renderProgress();
+  renderHistory();
+})();
+</script>
