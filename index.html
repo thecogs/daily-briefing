@@ -699,8 +699,13 @@
       tile.querySelector("#cdPhase").textContent = phase.label;
       tile.querySelector("#cdClock").textContent = fmtClock(remaining);
       var kindEl = tile.querySelector("#cdKind");
-      kindEl.textContent = phase.kind === "high" ? "Hard effort" : (phaseIdx === 0 ? "Warm-up" : phaseIdx === CARDIO_PHASES.length - 1 ? "Cool-down" : "Recovery");
-      kindEl.className = "cd-kind " + phase.kind;
+      if (phase.kind === "high") {
+        kindEl.textContent = "Hard effort — 85–95% max HR";
+        kindEl.className = "cd-kind high";
+        kindEl.style.display = "";
+      } else {
+        kindEl.style.display = "none";
+      }
       segEls.forEach(function (seg, i) {
         seg.classList.toggle("done", i < phaseIdx);
         seg.classList.remove("now", "high", "low");
