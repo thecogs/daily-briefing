@@ -139,19 +139,12 @@
   .verse-body { font-family: "Fraunces", Georgia, serif; font-size: 15.5px; line-height: 1.7; font-style: italic; }
   .verse-ref { font-size: 12.5px; color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; font-style: normal; margin-top: 4px; }
 
-  .video-card {
-    position: relative; border-radius: 6px; overflow: hidden;
-    background: linear-gradient(135deg, var(--accent-dark), var(--accent)); color: #fff;
-    padding: 22px 18px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 8px; text-align: center; min-height: 110px;
-  }
-  .video-play { width: 46px; height: 46px; border-radius: 50%; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; }
-  .video-play svg { width: 18px; height: 18px; }
-  .video-card .vc-title { font-weight: 600; font-size: 15px; }
-  .video-card .vc-sub { font-size: 12px; opacity: 0.85; }
-  .stretch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 6px; margin-top: 4px; }
-  .stretch-row { display: flex; justify-content: space-between; font-size: 13.5px; padding: 5px 0; border-bottom: 1px solid var(--border); }
-  .stretch-row .dur { font-family: "IBM Plex Mono", monospace; color: var(--ink-soft); font-size: 12.5px; }
+  .stretch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 10px; margin-top: 4px; }
+  .qi-row { padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .qi-head { display: flex; align-items: baseline; gap: 8px; font-size: 13.5px; font-weight: 500; }
+  .qi-num { font-family: "IBM Plex Mono", monospace; color: var(--accent-2); font-size: 12px; font-weight: 700; flex: none; }
+  .qi-head .dur { margin-left: auto; font-family: "IBM Plex Mono", monospace; color: var(--ink-soft); font-size: 12px; font-weight: 400; }
+  .qi-cue { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin-top: 3px; padding-left: 20px; }
   .note { font-size: 11.5px; color: var(--ink-faint); }
 
   /* ---------- Strength tile ---------- */
@@ -403,12 +396,16 @@
       vocab: [["être pris au dépourvu", "to be caught off guard"], ["tomber des nues", "to be utterly stunned"], ["du jour au lendemain", "overnight / abruptly"], ["laisser entendre", "to hint"], ["changer de voie", "to change career path"]] }
   ];
 
-  var STRETCH_MOVES = [
-    ["Neck rolls", "30 sec"],
-    ["Cat-cow", "45 sec"],
-    ["Standing forward fold", "30 sec"],
-    ["Quad stretch, each side", "30 sec"],
-    ["Child's pose", "45 sec"]
+  // Baduanjin ("Eight Pieces of Brocade") — the standard classical qigong set
+  var QIGONG_MOVES = [
+    ["Two Hands Hold Up the Heavens", "8 reps", "Interlace fingers, press palms overhead on the inhale, release on the exhale — lengthens the spine, settles the breath."],
+    ["Drawing the Bow to Shoot the Hawk", "6 reps/side", "Wide horse stance, draw one hand back like a bowstring — opens the chest and shoulders."],
+    ["Separate Heaven and Earth", "8 reps", "One palm presses up, the other down, alternating sides — wrings out the torso and stomach."],
+    ["Wise Owl Gazes Backward", "6 reps/side", "Turn the head and gently look behind you without moving the hips — releases neck tension."],
+    ["Sway the Head and Shake the Tail", "6 reps/side", "Low horse stance, lean and circle the head — traditionally said to clear excess heat."],
+    ["Two Hands Hold the Feet", "8 reps", "Bend forward to hold the feet, then arch back with hands at the low back — works the low back and kidneys."],
+    ["Clench the Fists, Glare Fiercely", "6 reps/side", "Wide stance, punch slowly with a firm grip and an intent gaze — builds internal power (\"qi\")."],
+    ["Bounce on the Heels", "8 reps", "Rise onto the toes, drop the heels to the floor with a light thud — settles the whole set."]
   ];
 
   // Classic 6-day push/pull/legs split, Sunday active recovery
@@ -749,20 +746,17 @@
     wireContentHead(tile, "pray");
   })();
 
-  // ---- Stretch tile ----
+  // ---- Stretch tile: Baduanjin qigong set ----
   (function () {
     var tile = document.getElementById("tile-stretch");
-    var searchUrl = "https://www.youtube.com/results?search_query=" + encodeURIComponent("5 minute morning stretch routine");
     var html = contentHead("stretch") + '<div class="content-body">';
-    html += '<div class="video-card"><div class="video-play"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"></path></svg></div>' +
-      '<div class="vc-title">5-minute morning stretch</div>' +
-      '<div class="vc-sub">A quick guided routine, plus the moves below</div>' +
-      '<a class="btn-link" href="' + searchUrl + '" target="_blank" rel="noopener">Find a video on YouTube ↗</a></div>';
+    html += '<div class="cd-desc">Baduanjin, the "Eight Pieces of Brocade" — a standing qigong set practiced for over a thousand years. Move slowly, breathe through the nose, and keep the knees soft throughout. About 10 minutes end to end.</div>';
     html += '<div class="stretch-grid">';
-    STRETCH_MOVES.forEach(function (m) {
-      html += '<div class="stretch-row"><span>' + esc(m[0]) + '</span><span class="dur">' + esc(m[1]) + '</span></div>';
+    QIGONG_MOVES.forEach(function (m, i) {
+      html += '<div class="qi-row"><div class="qi-head"><span class="qi-num">' + (i + 1) + '</span><span>' + esc(m[0]) + '</span><span class="dur">' + esc(m[1]) + '</span></div>' +
+        '<div class="qi-cue">' + esc(m[2]) + '</div></div>';
     });
-    html += '</div><div class="note">Artifacts can’t embed YouTube directly (browser sandboxing) — this opens search results in a new tab instead.</div></div>';
+    html += '</div></div>';
     tile.innerHTML = html;
     wireContentHead(tile, "stretch");
   })();
