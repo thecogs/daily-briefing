@@ -149,9 +149,10 @@
 
   /* ---------- Strength tile ---------- */
   .split-badge { display: inline-block; background: var(--accent-2-wash); color: var(--accent-2); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 999px; }
-  .lift-name { font-family: "Fraunces", Georgia, serif; font-size: 19px; font-weight: 600; margin-top: 8px; }
-  .lift-scheme { font-size: 13.5px; color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; margin-top: 2px; }
-  .lift-note { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
+  .lift-note { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .lift-list { display: flex; flex-direction: column; margin-top: 8px; }
+  .lift-row { font-size: 13.5px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .lift-row:last-child { border-bottom: none; }
   .log-row { display: flex; gap: 8px; margin-top: 12px; }
   .log-row input {
     flex: 1; min-width: 0; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 5px;
@@ -409,14 +410,40 @@
   ];
 
   // Classic 6-day push/pull/legs split, Sunday active recovery
+  var LEG_DAY = [
+    "10–15 min warm-up of choice",
+    "5 min dynamic stretch",
+    "4 sets goblet squats — drop set to failure",
+    "4×8 Bulgarian split squats",
+    "4×8 dumbbell RDLs",
+    "4×8 reverse lunges (Smith machine; elevate the working foot)",
+    "4 sets leg extension — to failure",
+    "4 sets hamstring curl — to failure",
+    "4 sets glute extension — drop set to failure"
+  ];
+
   var STRENGTH_PROGRAM = [
-    { split: "Recovery", lift: "Mobility & easy walking", scheme: "20–30 min, easy effort", note: "No lifting today — let the week's primary lifts recover.", log: false },
-    { split: "Push", lift: "Barbell bench press", scheme: "5 sets × 5 reps", note: "Match or beat last logged top set.", log: true },
-    { split: "Pull", lift: "Conventional deadlift", scheme: "3 sets × 5 reps", note: "Add load only if last session felt crisp, not grinding.", log: true },
-    { split: "Legs", lift: "Back squat", scheme: "5 sets × 5 reps", note: "Depth over load — full range on every rep.", log: true },
-    { split: "Push", lift: "Overhead press", scheme: "5 sets × 5 reps", note: "Strict form, no leg drive.", log: true },
-    { split: "Pull", lift: "Weighted pull-ups", scheme: "4 sets × 6 reps", note: "Add weight before adding reps.", log: true },
-    { split: "Legs", lift: "Front squat or leg press", scheme: "4 sets × 8 reps", note: "Higher-rep day — control the eccentric.", log: true }
+    { split: "Recovery", lift: null, log: false,
+      exercises: ["20–30 min easy walking or mobility work"],
+      note: "No lifting today — let the week's primary lifts recover." },
+    { split: "Push", lift: "Barbell bench press", log: true,
+      exercises: ["5 sets × 5 reps barbell bench press", "3 sets × 8 reps incline dumbbell press", "3 sets × 10 reps triceps pressdown"],
+      note: "Match or beat last logged top set on bench." },
+    { split: "Pull", lift: "Conventional deadlift", log: true,
+      exercises: ["3 sets × 5 reps conventional deadlift", "4 sets × 8 reps barbell row", "3 sets × 10 reps barbell curl"],
+      note: "Add load only if last session felt crisp, not grinding." },
+    { split: "Legs", lift: "Goblet squat", log: true,
+      exercises: LEG_DAY,
+      note: "Your leg day — go by feel on the drop sets." },
+    { split: "Push", lift: "Overhead press", log: true,
+      exercises: ["5 sets × 5 reps overhead press", "3 sets × 10 reps lateral raise", "3 sets × 12 reps push-ups"],
+      note: "Strict form, no leg drive." },
+    { split: "Pull", lift: "Weighted pull-ups", log: true,
+      exercises: ["4 sets × 6 reps weighted pull-ups", "3 sets × 10 reps seated cable row", "3 sets × 12 reps face pulls"],
+      note: "Add weight before adding reps." },
+    { split: "Legs", lift: "Goblet squat", log: true,
+      exercises: LEG_DAY,
+      note: "Your leg day — go by feel on the drop sets." }
   ];
 
   // Norwegian 4x4: warm-up, 4 x (4 min hard / 3 min easy), cool-down — ~40 min, VO2max protocol
@@ -581,11 +608,14 @@
 
     var html = contentHead("lift") + '<div class="content-body">';
     html += '<span class="split-badge">' + esc(program.split) + '</span>';
-    html += '<div class="lift-name">' + esc(program.lift) + '</div>';
-    html += '<div class="lift-scheme">' + esc(program.scheme) + '</div>';
-    html += '<div class="lift-note">' + esc(program.note) + '</div>';
+    html += '<div class="lift-note" style="margin-top:8px;">' + esc(program.note) + '</div>';
+    html += '<div class="lift-list">';
+    program.exercises.forEach(function (line) {
+      html += '<div class="lift-row">' + esc(line) + '</div>';
+    });
+    html += '</div>';
     if (program.log) {
-      html += '<div class="log-row"><input type="number" inputmode="decimal" id="strengthInput" placeholder="Top set weight (lb)" value="' + (todayEntry ? todayEntry.weight : '') + '">' +
+      html += '<div class="log-row"><input type="number" inputmode="decimal" id="strengthInput" placeholder="' + esc(program.lift) + ' top set (lb)" value="' + (todayEntry ? todayEntry.weight : '') + '">' +
         '<button class="btn primary" id="strengthSave">Log</button></div>';
       html += '<div class="lift-delta" id="liftDelta"></div>';
     }
