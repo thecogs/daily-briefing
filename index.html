@@ -510,6 +510,11 @@
   function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return c === "&" ? "&amp;" : c === "<" ? "&lt;" : "&gt;"; }); }
 
   // ==================== Supabase auth + sync ====================
+  // Hardcoded, not window.location.href: on mobile the current URL can
+  // differ slightly (no trailing slash, a share-link query param, etc.),
+  // and Supabase requires an exact match against its Redirect URLs
+  // allow-list or it silently drops the session and bounces back to login.
+  var CANONICAL_URL = "https://thecogs.github.io/daily-briefing/";
   var SUPABASE_URL = "https://hppgdbhadeqzmocqlybw.supabase.co";
   var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwcGdkYmhhZGVxem1vY3FseWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzY2MDcsImV4cCI6MjEwMzExMjYwN30.CbfIeXD2xBc9BLd26zQ4PkgLZKeT9kPqK5UKaMjUUiE";
   var supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -566,7 +571,7 @@
   }
 
   document.getElementById("googleSignInBtn").addEventListener("click", function () {
-    supa.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.href } });
+    supa.auth.signInWithOAuth({ provider: "google", options: { redirectTo: CANONICAL_URL } });
   });
   document.getElementById("signOutBtn").addEventListener("click", function () {
     supa.auth.signOut().then(function () { location.reload(); });
