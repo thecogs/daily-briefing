@@ -648,17 +648,48 @@
     });
   })();
 
-  // ---- Poem tile ----
-  (function () {
-    var p = POEMS[poemIdx];
+  // ---- Poem tile: a real, different poem fetched live every day from PoetryDB ----
+  // PoetryDB (poetrydb.org) is a free public-domain poetry API with open CORS,
+  // so unlike Poetry Foundation it can actually be fetched from the browser.
+  // Picking a poet + title deterministically by date (not randomly) means the
+  // poem is stable all day and spans a pool of ~800 poems across 6 poets.
+  var POEM_POETS = ["Emily Dickinson", "William Blake", "John Keats", "Percy Bysshe Shelley", "Walt Whitman", "Christina Rossetti"];
+  function renderPoem(p, isLive) {
     var tile = document.getElementById("tile-poem");
     tile.innerHTML = contentHead("poem") +
       '<div class="content-body"><div class="poem-title">' + esc(p.title) + '</div>' +
       '<div class="poem-author">' + esc(p.author) + '</div>' +
       '<div class="poem-body">' + esc(p.body) + '</div>' +
-      '<div style="margin-top:10px;"><a class="btn-link" href="https://www.poetryfoundation.org/poems/poem-of-the-day" target="_blank" rel="noopener">Today’s actual pick on Poetry Foundation ↗</a></div>' +
-      '<div class="note" style="margin-top:8px;">Poetry Foundation blocks cross-site fetching (bot protection, no CORS) — this rotates a real, complete poem locally instead of mirroring their page.</div></div>';
+      '<div style="margin-top:10px;"><a class="btn-link" href="https://www.poetryfoundation.org/poems/poem-of-the-day" target="_blank" rel="noopener">Also see Poetry Foundation’s pick ↗</a></div>' +
+      '<div class="note" style="margin-top:8px;">' + (isLive
+        ? "Fetched live from PoetryDB (public domain), picked by today’s date from ~800 poems across 6 poets."
+        : "Couldn’t reach PoetryDB — showing a bundled poem instead.") + '</div></div>';
     wireContentHead(tile, "poem");
+  }
+  (function () {
+    var tile = document.getElementById("tile-poem");
+    tile.innerHTML = contentHead("poem") + '<div class="content-body"><div class="note">Fetching today’s poem…</div></div>';
+    wireContentHead(tile, "poem");
+
+    var poet = POEM_POETS[dayHash("poem-poet:" + key) % POEM_POETS.length];
+    fetch("https://poetrydb.org/author/" + encodeURIComponent(poet) + "/title")
+      .then(function (r) { if (!r.ok) throw new Error("bad response"); return r.json(); })
+      .then(function (titles) {
+        if (!Array.isArray(titles) || !titles.length) throw new Error("no titles");
+        var title = titles[dayHash("poem-title:" + key) % titles.length].title;
+        return fetch("https://poetrydb.org/title/" + encodeURIComponent(title));
+      })
+      .then(function (r) { if (!r.ok) throw new Error("bad response"); return r.json(); })
+      .then(function (poems) {
+        var poem = Array.isArray(poems) ? poems[0] : poems;
+        if (!poem || !poem.lines || !poem.lines.length) throw new Error("bad poem");
+        var lines = poem.lines;
+        var body = lines.length > 44 ? lines.slice(0, 44).join("\n") + "\n…" : lines.join("\n");
+        renderPoem({ title: poem.title, author: poem.author, body: body }, true);
+      })
+      .catch(function () {
+        renderPoem(POEMS[poemIdx], false);
+      });
   })();
 
   // ---- Verse tile ----
