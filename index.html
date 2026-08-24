@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Daily Briefing</title>
-<meta name="description" content="A personal daily-routine dashboard: habits, strength training, Norwegian 4x4 cardio, a poem, a verse, French practice, and a crossword, all in one page.">
+<meta name="description" content="A personal daily-routine dashboard: habits, strength training, cardio, a poem, a verse, qigong, French practice, and a daily crossword, all in one page.">
 <meta name="theme-color" content="#17324f">
 <meta property="og:title" content="Daily Briefing">
-<meta property="og:description" content="A personal daily-routine dashboard: habits, strength training, Norwegian 4x4 cardio, a poem, a verse, French practice, and a crossword, all in one page.">
+<meta property="og:description" content="A personal daily-routine dashboard: habits, strength training, cardio, a poem, a verse, qigong, French practice, and a daily crossword, all in one page.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2218%22 fill=%22%2317324f%22/><path d=%22M28 52 L44 68 L74 34%22 stroke=%22%23d8ab5f%22 stroke-width=%229%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,35 +147,10 @@
   .qi-cue { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin-top: 3px; padding-left: 20px; }
   .note { font-size: 11.5px; color: var(--ink-faint); }
 
-  /* ---------- Strength tile ---------- */
-  .split-badge { display: inline-block; background: var(--accent-2-wash); color: var(--accent-2); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 999px; }
+  /* ---------- Strength / Cardio tiles ---------- */
   .lift-note { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
-  .lift-list { display: flex; flex-direction: column; margin-top: 8px; }
-  .lift-row { font-size: 13.5px; padding: 5px 0; border-bottom: 1px solid var(--border); }
-  .lift-row:last-child { border-bottom: none; }
-  .log-row { display: flex; gap: 8px; margin-top: 12px; }
-  .log-row input {
-    flex: 1; min-width: 0; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 5px;
-    padding: 8px 10px; font-size: 14px; color: var(--ink); font-family: "IBM Plex Mono", monospace;
-  }
-  .lift-delta { font-size: 12.5px; color: var(--accent); font-weight: 600; margin-top: 8px; font-family: "IBM Plex Mono", monospace; }
-  .lift-delta.neg { color: var(--bad); }
-
-  /* ---------- Cardio / Norwegian 4x4 ---------- */
   .cd-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
-  .cd-panel { background: var(--surface-soft); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-top: 4px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  .cd-kind { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 999px; }
-  .cd-kind.high { background: var(--accent-2-wash); color: var(--accent-2); }
-  .cd-kind.low { background: var(--accent-wash); color: var(--accent); }
-  .cd-phase { font-size: 15px; font-weight: 600; }
-  .cd-clock { font-family: "IBM Plex Mono", monospace; font-size: 40px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; }
-  .cd-segments { display: flex; gap: 3px; width: 100%; }
-  .cd-seg { flex: 1; height: 6px; border-radius: 999px; background: var(--border); }
-  .cd-seg.done { background: var(--success); }
-  .cd-seg.now.high { background: var(--accent-2); }
-  .cd-seg.now.low { background: var(--accent); }
-  .cd-controls { display: flex; gap: 8px; }
-  .cd-status { font-size: 12.5px; color: var(--success); font-weight: 600; }
+  .cardio-options { display: flex; flex-direction: column; margin-top: 6px; }
 
   .xw-link-card {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -228,6 +203,28 @@
   .done-chip:hover { background: var(--success-wash); }
   .done-chip .dc-check { color: var(--success); font-size: 13px; }
   .done-chip .dc-text { color: var(--ink-soft); text-decoration: line-through; }
+
+  /* ---------- Tabs / History ---------- */
+  .tabbar { display: flex; gap: 6px; }
+  .tab-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink-soft);
+    border-radius: 5px; padding: 7px 16px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer;
+  }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tab-btn:hover:not(.active) { background: var(--accent-wash); }
+  .hist-day {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    box-shadow: var(--shadow); padding: 12px 16px; margin-bottom: 10px;
+  }
+  .hist-day-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .hist-day-date { font-weight: 600; font-size: 14px; }
+  .hist-day-count { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink-soft); }
+  .hist-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .hist-chip {
+    display: flex; align-items: center; gap: 5px; background: var(--success-wash); color: var(--success);
+    border-radius: 999px; padding: 4px 9px; font-size: 12px; font-weight: 500;
+  }
+  .hist-empty { font-size: 13px; color: var(--ink-faint); font-style: italic; }
 </style>
 </head>
 <body>
@@ -242,7 +239,12 @@
     <div class="date" id="dateLine"></div>
   </div>
 
-  <div class="dashboard">
+  <div class="tabbar">
+    <button class="tab-btn active" id="tabToday" type="button">Today</button>
+    <button class="tab-btn" id="tabHistory" type="button">History</button>
+  </div>
+
+  <div class="dashboard" id="view-today">
     <div class="tile span-1">
       <div class="tile-label">Today</div>
       <div class="stat-num"><span id="doneCount">0</span><span style="font-size:16px;color:var(--ink-faint);">/<span id="totalCount">14</span></span></div>
@@ -276,13 +278,18 @@
       <div class="done-list" id="doneList"></div>
     </div>
   </div>
+
+  <div id="view-history" class="history-view" style="display:none;">
+    <div class="tile-label" style="margin-bottom:8px;">Past days</div>
+    <div id="historyList"></div>
+  </div>
 </div>
 
 <script>
 (function () {
-  var STORAGE_KEY = "morning-ledger-v6";
-  var IDX_KEY = "morning-ledger-idx-v6";
-  var STRENGTH_LOG_KEY = "morning-ledger-strength-log-v1";
+  var STORAGE_KEY = "morning-ledger-v7";
+  var IDX_KEY = "morning-ledger-idx-v7";
+  var CARDIO_LOG_KEY = "morning-ledger-cardio-log-v1";
 
   var ALL_TASK_IDS = ["make-bed","shower","pray","book","journal","poem","french","crossword","fact","stretch","lift","cardio","diet","creatine"];
 
@@ -298,7 +305,7 @@
     "fact":     { emoji: "💡", label: "Learn something new" },
     "stretch":  { emoji: "🤸", label: "Morning stretch" },
     "lift":     { emoji: "🏋️", label: "Strength training" },
-    "cardio":   { emoji: "🏃", label: "Cardio — Norwegian 4×4" },
+    "cardio":   { emoji: "🏃", label: "Cardio" },
     "diet":     { emoji: "🥗", label: "Dial in my diet" },
     "creatine": { emoji: "💊", label: "Creatine" }
   };
@@ -358,26 +365,57 @@
     { ref: "Romans 8:28 (KJV)", text: "And we know that all things work together for good to them that love God, to them who are the called according to his purpose." }
   ];
 
-  var XWORDS = [
-    { down: { word: "BRAIN", clue: "Where your thoughts live" },
-      across: [
-        { word: "ABS", clue: "Core muscles, informally" },
-        { word: "CAT", clue: "Common house pet" },
-        { word: "ANY", clue: "Some, in a general sense" }
-      ] },
-    { down: { word: "OCEAN", clue: "Vast body of salt water" },
-      across: [
-        { word: "TOE", clue: "Foot digit" },
-        { word: "TEN", clue: "Number after nine" },
-        { word: "INN", clue: "Small roadside hotel" }
-      ] },
-    { down: { word: "APPLE", clue: "Fruit that keeps the doctor away" },
-      across: [
-        { word: "CAT", clue: "Common house pet" },
-        { word: "OPT", clue: "Choose" },
-        { word: "BEE", clue: "Buzzing garden visitor" }
-      ] }
+  // A new mini crossword every day: pick a 5-letter "spine" word (the down
+  // clue), then independently pick a 3-letter across word for each of rows
+  // 0/2/4 whose middle letter matches the spine's letter there. Every
+  // combination is checked to intersect correctly, so any pairing is valid —
+  // with 20+ spines and several across options per letter, this covers
+  // thousands of distinct puzzles rather than a small fixed set.
+  var XW_SPINES = [
+    { word: "OCEAN", clue: "Vast body of salt water" },
+    { word: "ARENA", clue: "Venue for a sporting event" },
+    { word: "STONE", clue: "Rock, or a piece of jewelry setting" },
+    { word: "TEASE", clue: "To playfully provoke" },
+    { word: "NOISE", clue: "Unwanted sound" },
+    { word: "SNORE", clue: "Sound made during deep sleep" },
+    { word: "STARE", clue: "To look fixedly" },
+    { word: "ADORE", clue: "To love deeply" },
+    { word: "IRATE", clue: "Furious" },
+    { word: "SATIN", clue: "Smooth, glossy fabric" },
+    { word: "SIREN", clue: "Emergency vehicle sound" },
+    { word: "STAIN", clue: "Discoloration mark" },
+    { word: "RATIO", clue: "Proportional relationship" },
+    { word: "NAIVE", clue: "Lacking worldly experience" },
+    { word: "ANIME", clue: "Japanese animation style" },
+    { word: "ARISE", clue: "To come into being" },
+    { word: "ASIDE", clue: "Remark made in passing" },
+    { word: "ONSET", clue: "The beginning of something" },
+    { word: "STEER", clue: "To guide a vehicle" },
+    { word: "ENSUE", clue: "To happen as a result" },
+    { word: "ERASE", clue: "To rub out" }
   ];
+  // Bank of 3-letter words keyed by their middle letter, each with a clue.
+  var XW_BANK = {
+    A: [["CAT","Common house pet"],["BAT","Flying mammal, or baseball gear"],["HAT","Head covering"],["MAP","Guide for navigation"],["CAP","Baseball headwear"],["CAB","Taxi, informally"],["JAM","Fruit spread, or traffic trouble"],["RAT","Sewer-dwelling rodent"],["VAN","Boxy vehicle"],["TAX","Government levy"]],
+    E: [["TEN","Number after nine"],["BEE","Buzzing garden visitor"],["LEG","Body part below the knee"],["PEN","Writing tool"],["HEN","Female chicken"],["WEB","Spider's creation"],["SEA","Large body of salt water"],["NET","Fishing or sports equipment"],["JET","Fast aircraft"],["GEM","Precious stone"]],
+    I: [["BIG","Large in size"],["PIG","Farm animal that oinks"],["FIG","Sweet fruit, often dried"],["DIG","To excavate"],["TIP","Gratuity, or pointed end"],["SIP","Small drink"],["RIB","Part of the ribcage"],["WIN","To be victorious"],["KID","Young child, informally"],["LIP","Part of the mouth"]],
+    N: [["ANY","Some, in a general sense"],["INN","Small roadside hotel"],["ONE","First counting number"],["END","Final part"],["AND","Conjunction joining two ideas"]],
+    O: [["TOE","Foot digit"],["TOP","Highest point"],["DOG","Loyal pet, man's best friend"],["HOT","High in temperature"],["POT","Cooking vessel"],["FOX","Cunning woodland animal"],["LOG","Cut piece of a tree trunk"],["ROT","To decay"],["SOB","To cry heavily"],["BOX","Square container"]],
+    R: [["ARM","Limb from shoulder to hand"],["ART","Creative expression"],["ORB","Sphere-shaped object"],["ORE","Raw mineral, mined"],["ARC","Curved line"],["ARK","Noah's vessel"],["IRE","Anger"],["ERR","To make a mistake"]],
+    S: [["ASK","To pose a question"],["ASH","Remains after burning"],["ASP","Venomous snake"],["USE","To utilize"]],
+    T: [["ATE","Consumed food, past tense"],["ETA","Estimated arrival time, abbr."],["ITS","Belonging to it"]]
+  };
+  function pickCrosswordSeeded(seedKey) {
+    var spine = XW_SPINES[dayHash("xw-spine:" + seedKey) % XW_SPINES.length];
+    var rows = [0, 2, 4];
+    var across = rows.map(function (r, i) {
+      var letter = spine.word[r];
+      var bank = XW_BANK[letter];
+      var pick = bank[dayHash("xw-a" + i + ":" + seedKey) % bank.length];
+      return { word: pick[0], clue: pick[1] };
+    });
+    return { down: { word: spine.word, clue: spine.clue }, across: across };
+  }
 
   var FRENCH = [
     { title: "Le télétravail", level: "B1",
@@ -394,7 +432,22 @@
       fr: "Quand mon collègue m'a annoncé qu'il démissionnait du jour au lendemain, j'ai été pris au dépourvu. Ce n'est pas tous les jours qu'on tombe des nues comme ça. Cela dit, il faut avouer qu'il avait déjà laissé entendre, à plusieurs reprises, qu'il songeait à changer de voie.",
       en: "When my colleague told me he was quitting overnight, I was caught completely off guard. It's not every day you're that blindsided. That said, I have to admit he'd already hinted, more than once, that he was thinking about a career change.",
       grammar: "<b>Idiomatic expressions</b>: <i>tomber des nues</i> (\"to fall from the clouds\") means to be totally stunned; <i>du jour au lendemain</i> = overnight, out of nowhere.",
-      vocab: [["être pris au dépourvu", "to be caught off guard"], ["tomber des nues", "to be utterly stunned"], ["du jour au lendemain", "overnight / abruptly"], ["laisser entendre", "to hint"], ["changer de voie", "to change career path"]] }
+      vocab: [["être pris au dépourvu", "to be caught off guard"], ["tomber des nues", "to be utterly stunned"], ["du jour au lendemain", "overnight / abruptly"], ["laisser entendre", "to hint"], ["changer de voie", "to change career path"]] },
+    { title: "L'intelligence artificielle", level: "B2",
+      fr: "L'intelligence artificielle s'immisce peu à peu dans tous les métiers, si bien qu'il devient difficile d'imaginer un secteur qu'elle ne finira pas par toucher. Certains y voient une menace pour l'emploi ; d'autres, un outil qui, bien maîtrisé, pourrait libérer du temps pour des tâches à plus forte valeur ajoutée. Quoi qu'il en soit, mieux vaut s'y intéresser dès maintenant que de la subir plus tard.",
+      en: "Artificial intelligence is gradually creeping into every profession, to the point where it's becoming hard to imagine a sector it won't eventually touch. Some see it as a threat to jobs; others see it as a tool that, well-handled, could free up time for higher-value work. Either way, it's better to take an interest now than to be caught off guard by it later.",
+      grammar: "<b>Quoi qu'il en soit</b> (\"be that as it may\") is a fixed subjunctive expression used to pivot a discussion — very common in spoken argument.",
+      vocab: [["s'immiscer dans", "to creep into / infiltrate"], ["une menace", "a threat"], ["à forte valeur ajoutée", "high-value (work)"], ["quoi qu'il en soit", "be that as it may"], ["subir", "to be subjected to / endure"]] },
+    { title: "Un dîner raté", level: "B1",
+      fr: "Hier soir, j'avais invité des amis à dîner, mais tout est parti de travers. Le rôti a brûlé pendant que je bavardais, et je me suis rendu compte trop tard qu'il manquait une bouteille de vin. Heureusement, mes invités ont pris ça avec humour, et on a fini par commander des pizzas en riant de la situation.",
+      en: "Last night I'd invited friends over for dinner, but everything went sideways. The roast burned while I was chatting, and I realized too late that I was missing a bottle of wine. Luckily, my guests took it in stride, and we ended up ordering pizza, laughing about the whole thing.",
+      grammar: "<b>Partir de travers</b> (\"to go sideways/wrong\") and <b>se rendre compte</b> (\"to realize\") are everyday reflexive/idiomatic verbs worth having ready in conversation.",
+      vocab: [["partir de travers", "to go wrong / sideways"], ["se rendre compte", "to realize"], ["prendre avec humour", "to take in stride"], ["un rôti", "a roast"], ["heureusement", "luckily"]] },
+    { title: "La vie privée en ligne", level: "B2",
+      fr: "De plus en plus d'internautes se soucient de la façon dont leurs données personnelles sont exploitées par les grandes plateformes. Il ne suffit plus de cocher une case pour se sentir en sécurité : encore faudrait-il comprendre ce que l'on accepte réellement. D'où l'intérêt croissant pour les outils qui permettent de reprendre, ne serait-ce qu'en partie, le contrôle de ses informations.",
+      en: "More and more internet users are concerned about how their personal data is used by major platforms. Ticking a box is no longer enough to feel secure — one would also need to understand what one is actually agreeing to. Hence the growing interest in tools that let people regain, even partially, control over their information.",
+      grammar: "<b>Ne serait-ce que</b> (\"even just / if only\") softens a claim while still asserting it — a nuanced, slightly formal construction common in written French.",
+      vocab: [["se soucier de", "to be concerned about"], ["cocher une case", "to tick a box"], ["il ne suffit pas de", "it's not enough to"], ["ne serait-ce que", "even just / if only"], ["reprendre le contrôle", "to regain control"]] }
   ];
 
   // Baduanjin ("Eight Pieces of Brocade") — the standard classical qigong set
@@ -409,56 +462,6 @@
     ["Bounce on the Heels", "8 reps", "Rise onto the toes, drop the heels to the floor with a light thud — settles the whole set."]
   ];
 
-  // Classic 6-day push/pull/legs split, Sunday active recovery
-  var LEG_DAY = [
-    "10–15 min warm-up of choice",
-    "5 min dynamic stretch",
-    "4 sets goblet squats — drop set to failure",
-    "4×8 Bulgarian split squats",
-    "4×8 dumbbell RDLs",
-    "4×8 reverse lunges (Smith machine; elevate the working foot)",
-    "4 sets leg extension — to failure",
-    "4 sets hamstring curl — to failure",
-    "4 sets glute extension — drop set to failure"
-  ];
-
-  var STRENGTH_PROGRAM = [
-    { split: "Recovery", lift: null, log: false,
-      exercises: ["20–30 min easy walking or mobility work"],
-      note: "No lifting today — let the week's primary lifts recover." },
-    { split: "Push", lift: "Barbell bench press", log: true,
-      exercises: ["5 sets × 5 reps barbell bench press", "3 sets × 8 reps incline dumbbell press", "3 sets × 10 reps triceps pressdown"],
-      note: "Match or beat last logged top set on bench." },
-    { split: "Pull", lift: "Conventional deadlift", log: true,
-      exercises: ["3 sets × 5 reps conventional deadlift", "4 sets × 8 reps barbell row", "3 sets × 10 reps barbell curl"],
-      note: "Add load only if last session felt crisp, not grinding." },
-    { split: "Legs", lift: "Goblet squat", log: true,
-      exercises: LEG_DAY,
-      note: "Your leg day — go by feel on the drop sets." },
-    { split: "Push", lift: "Overhead press", log: true,
-      exercises: ["5 sets × 5 reps overhead press", "3 sets × 10 reps lateral raise", "3 sets × 12 reps push-ups"],
-      note: "Strict form, no leg drive." },
-    { split: "Pull", lift: "Weighted pull-ups", log: true,
-      exercises: ["4 sets × 6 reps weighted pull-ups", "3 sets × 10 reps seated cable row", "3 sets × 12 reps face pulls"],
-      note: "Add weight before adding reps." },
-    { split: "Legs", lift: "Goblet squat", log: true,
-      exercises: LEG_DAY,
-      note: "Your leg day — go by feel on the drop sets." }
-  ];
-
-  // Norwegian 4x4: warm-up, 4 x (4 min hard / 3 min easy), cool-down — ~40 min, VO2max protocol
-  var CARDIO_PHASES = [
-    { label: "Warm-up", seconds: 600, kind: "low" },
-    { label: "Interval 1 of 4", seconds: 240, kind: "high" },
-    { label: "Active recovery", seconds: 180, kind: "low" },
-    { label: "Interval 2 of 4", seconds: 240, kind: "high" },
-    { label: "Active recovery", seconds: 180, kind: "low" },
-    { label: "Interval 3 of 4", seconds: 240, kind: "high" },
-    { label: "Active recovery", seconds: 180, kind: "low" },
-    { label: "Interval 4 of 4", seconds: 240, kind: "high" },
-    { label: "Cool-down", seconds: 300, kind: "low" }
-  ];
-
   function todayKey(d) {
     d = d || new Date();
     return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
@@ -471,7 +474,6 @@
   function loadJSON(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch (e) { return {}; } }
   function saveJSON(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
   function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return c === "&" ? "&amp;" : c === "<" ? "&lt;" : "&gt;"; }); }
-  function fmtClock(s) { var m = Math.floor(s / 60), sec = s % 60; return m + ":" + String(sec).padStart(2, "0"); }
 
   var store = loadJSON(STORAGE_KEY);
   var key = todayKey();
@@ -490,7 +492,6 @@
   var factIdx = pickIndex("fact", FACTS.length);
   var poemIdx = pickIndex("poem", POEMS.length);
   var verseIdx = pickIndex("verse", VERSES.length);
-  var xwIdx = pickIndex("xw", XWORDS.length);
   var frIdx = pickIndex("fr", FRENCH.length);
 
   var hour = new Date().getHours();
@@ -545,8 +546,8 @@
   function setCheckboxVisual(id, done) {
     document.querySelectorAll('[data-checkbox-for="' + id + '"]').forEach(function (box) { box.classList.toggle("done", done); });
   }
-  function toggleTask(id) {
-    var nowDone = !todayState[id];
+  function setTaskDone(id, nowDone) {
+    if (todayState[id] === nowDone) return;
     todayState[id] = nowDone;
     saveJSON(STORAGE_KEY, store);
     setCheckboxVisual(id, nowDone);
@@ -560,6 +561,9 @@
     }
     renderProgress();
     renderHistory();
+  }
+  function toggleTask(id) {
+    setTaskDone(id, !todayState[id]);
   }
   function checkboxHTML(id) {
     return '<div class="chk-box' + (todayState[id] ? ' done' : '') + '" data-checkbox-for="' + id + '"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>';
@@ -596,164 +600,52 @@
     head.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggleTask(id); } });
   }
 
-  // ---- Strength tile ----
+  // ---- Strength tile: simple yes/no ----
   (function () {
     var tile = document.getElementById("tile-strength");
-    var weekday = new Date().getDay();
-    var program = STRENGTH_PROGRAM[weekday];
-    var strengthLog = loadJSON(STRENGTH_LOG_KEY);
-    var prevKey = todayKey(new Date(Date.now() - 7 * 86400000));
-    var prevEntry = strengthLog[prevKey];
-    var todayEntry = strengthLog[key];
-
-    var html = contentHead("lift") + '<div class="content-body">';
-    html += '<span class="split-badge">' + esc(program.split) + '</span>';
-    html += '<div class="lift-note" style="margin-top:8px;">' + esc(program.note) + '</div>';
-    html += '<div class="lift-list">';
-    program.exercises.forEach(function (line) {
-      html += '<div class="lift-row">' + esc(line) + '</div>';
-    });
-    html += '</div>';
-    if (program.log) {
-      html += '<div class="log-row"><input type="number" inputmode="decimal" id="strengthInput" placeholder="' + esc(program.lift) + ' top set (lb)" value="' + (todayEntry ? todayEntry.weight : '') + '">' +
-        '<button class="btn primary" id="strengthSave">Log</button></div>';
-      html += '<div class="lift-delta" id="liftDelta"></div>';
-    }
-    html += '</div>';
-    tile.innerHTML = html;
+    tile.innerHTML = contentHead("lift") +
+      '<div class="content-body"><div class="lift-note">Whatever’s on today’s plan — just mark it done.</div></div>';
     wireContentHead(tile, "lift");
-
-    if (program.log) {
-      var input = tile.querySelector("#strengthInput");
-      var deltaEl = tile.querySelector("#liftDelta");
-      var matchingPrev = (prevEntry && prevEntry.lift === program.lift) ? prevEntry : null;
-
-      function renderDelta() {
-        var val = parseFloat(input.value);
-        if (!matchingPrev) { deltaEl.textContent = ""; return; }
-        if (!val) { deltaEl.textContent = "Last time: " + matchingPrev.weight + " lb"; deltaEl.classList.remove("neg"); return; }
-        var diff = Math.round((val - matchingPrev.weight) * 10) / 10;
-        deltaEl.textContent = (diff > 0 ? "+" : "") + diff + " lb vs last time (" + matchingPrev.weight + " lb)";
-        deltaEl.classList.toggle("neg", diff < 0);
-      }
-      renderDelta();
-      input.addEventListener("input", renderDelta);
-      tile.querySelector("#strengthSave").addEventListener("click", function () {
-        var val = parseFloat(input.value);
-        if (!val) return;
-        strengthLog[key] = { lift: program.lift, weight: val };
-        saveJSON(STRENGTH_LOG_KEY, strengthLog);
-        renderDelta();
-      });
-    }
   })();
 
-  // ---- Cardio / Norwegian 4x4 tile ----
+  // ---- Cardio tile: pick your mode ----
   (function () {
     var tile = document.getElementById("tile-cardio");
+    var CARDIO_OPTIONS = [
+      ["hike", "🥾", "Hike"],
+      ["run", "🏃", "Run"],
+      ["steps", "🔢", "10k steps"]
+    ];
+    var cardioLog = loadJSON(CARDIO_LOG_KEY);
+    var today = cardioLog[key] || {};
+
+    function anyChecked() { return CARDIO_OPTIONS.some(function (o) { return !!today[o[0]]; }); }
+
     var html = contentHead("cardio") + '<div class="content-body">';
-    html += '<div class="cd-desc">4 × 4 minutes at 85–95% max heart rate (hard, but sustainable), with 3 minutes of easy active recovery between rounds. ~40 min total including warm-up and cool-down — one of the best-studied protocols for raising VO<sub>2</sub>max.</div>';
-    html += '<div class="cd-panel">';
-    html += '<span class="cd-kind low" id="cdKind">Ready</span>';
-    html += '<div class="cd-phase" id="cdPhase">' + CARDIO_PHASES[0].label + '</div>';
-    html += '<div class="cd-clock" id="cdClock">' + fmtClock(CARDIO_PHASES[0].seconds) + '</div>';
-    html += '<div class="cd-segments" id="cdSegments"></div>';
-    html += '<div class="cd-controls"><button class="btn primary" id="cdStart">Start</button><button class="btn" id="cdPause" disabled>Pause</button><button class="btn" id="cdReset">Reset</button></div>';
-    html += '<div class="cd-status" id="cdStatus"></div>';
+    html += '<div class="cd-desc">Check off whichever you did today.</div>';
+    html += '<div class="cardio-options">';
+    CARDIO_OPTIONS.forEach(function (o) {
+      html += '<div class="chk-row cardio-opt" data-opt="' + o[0] + '" role="checkbox" tabindex="0" aria-checked="' + !!today[o[0]] + '">' +
+        '<div class="chk-box' + (today[o[0]] ? ' done' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>' +
+        '<span class="chk-emoji">' + o[1] + '</span><span class="chk-text">' + o[2] + '</span></div>';
+    });
     html += '</div></div>';
     tile.innerHTML = html;
     wireContentHead(tile, "cardio");
 
-    var segWrap = tile.querySelector("#cdSegments");
-    CARDIO_PHASES.forEach(function () {
-      var seg = document.createElement("div");
-      seg.className = "cd-seg";
-      segWrap.appendChild(seg);
-    });
-    var segEls = segWrap.querySelectorAll(".cd-seg");
-
-    var phaseIdx = 0, remaining = CARDIO_PHASES[0].seconds, timerId = null, audioCtx = null;
-
-    function getCtx() {
-      if (!audioCtx) {
-        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audioCtx = null; }
+    tile.querySelectorAll(".cardio-opt").forEach(function (row) {
+      function flip() {
+        var opt = row.dataset.opt;
+        today[opt] = !today[opt];
+        cardioLog[key] = today;
+        saveJSON(CARDIO_LOG_KEY, cardioLog);
+        row.querySelector(".chk-box").classList.toggle("done", today[opt]);
+        row.setAttribute("aria-checked", !!today[opt]);
+        setTaskDone("cardio", anyChecked());
       }
-      return audioCtx;
-    }
-    function beep(freq, dur) {
-      var ctx = getCtx();
-      if (!ctx) return;
-      try {
-        var osc = ctx.createOscillator(), gain = ctx.createGain();
-        osc.frequency.value = freq;
-        osc.connect(gain); gain.connect(ctx.destination);
-        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-        osc.start(); osc.stop(ctx.currentTime + dur);
-      } catch (e) {}
-    }
-
-    function updateUI() {
-      var phase = CARDIO_PHASES[phaseIdx];
-      tile.querySelector("#cdPhase").textContent = phase.label;
-      tile.querySelector("#cdClock").textContent = fmtClock(remaining);
-      var kindEl = tile.querySelector("#cdKind");
-      if (phase.kind === "high") {
-        kindEl.textContent = "Hard effort — 85–95% max HR";
-        kindEl.className = "cd-kind high";
-        kindEl.style.display = "";
-      } else {
-        kindEl.style.display = "none";
-      }
-      segEls.forEach(function (seg, i) {
-        seg.classList.toggle("done", i < phaseIdx);
-        seg.classList.remove("now", "high", "low");
-        if (i === phaseIdx) seg.classList.add("now", phase.kind);
-      });
-    }
-    function stopTimer() {
-      running = false;
-      clearInterval(timerId);
-      tile.querySelector("#cdStart").disabled = false;
-      tile.querySelector("#cdPause").disabled = true;
-    }
-    var running = false;
-    function tick() {
-      remaining--;
-      if (remaining > 0 && remaining <= 3) beep(880, 0.12);
-      if (remaining <= 0) {
-        phaseIdx++;
-        if (phaseIdx >= CARDIO_PHASES.length) {
-          stopTimer();
-          tile.querySelector("#cdStatus").textContent = "Session complete — nice work.";
-          phaseIdx = CARDIO_PHASES.length - 1;
-          remaining = 0;
-          updateUI();
-          if (!todayState.cardio) toggleTask("cardio");
-          return;
-        }
-        remaining = CARDIO_PHASES[phaseIdx].seconds;
-        beep(CARDIO_PHASES[phaseIdx].kind === "high" ? 1200 : 600, 0.35);
-      }
-      updateUI();
-    }
-    tile.querySelector("#cdStart").addEventListener("click", function () {
-      if (running) return;
-      running = true;
-      tile.querySelector("#cdStart").disabled = true;
-      tile.querySelector("#cdPause").disabled = false;
-      tile.querySelector("#cdStatus").textContent = "";
-      timerId = setInterval(tick, 1000);
+      row.addEventListener("click", flip);
+      row.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); } });
     });
-    tile.querySelector("#cdPause").addEventListener("click", function () { stopTimer(); });
-    tile.querySelector("#cdReset").addEventListener("click", function () {
-      stopTimer();
-      phaseIdx = 0; remaining = CARDIO_PHASES[0].seconds;
-      tile.querySelector("#cdStatus").textContent = "";
-      updateUI();
-    });
-    updateUI();
   })();
 
   // ---- Poem tile ----
@@ -837,7 +729,7 @@
 
   // ---- Crossword tile ----
   (function () {
-    var puz = XWORDS[xwIdx];
+    var puz = pickCrosswordSeeded(key);
     var tile = document.getElementById("tile-crossword");
     var grid = [];
     for (var r = 0; r < 5; r++) grid.push([null, null, null, null, null]);
@@ -975,6 +867,51 @@
     document.getElementById("streakNum").textContent = streak;
     document.getElementById("navSub").textContent += " · " + streak + "-day streak";
   }
+
+  // ---- History tab ----
+  function renderHistoryTab() {
+    var el = document.getElementById("historyList");
+    var dates = Object.keys(store).sort().reverse();
+    if (dates.length === 0) {
+      el.innerHTML = '<div class="hist-empty">Nothing recorded yet.</div>';
+      return;
+    }
+    var html = "";
+    dates.forEach(function (k) {
+      var dayState = store[k];
+      var doneIds = ALL_TASK_IDS.filter(function (id) { return dayState[id]; });
+      var d = new Date(k + "T00:00:00");
+      var label = d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+      html += '<div class="hist-day"><div class="hist-day-head"><span class="hist-day-date">' + label + '</span>' +
+        '<span class="hist-day-count">' + doneIds.length + '/' + ALL_TASK_IDS.length + '</span></div>';
+      if (doneIds.length === 0) {
+        html += '<div class="hist-empty">Nothing completed.</div>';
+      } else {
+        html += '<div class="hist-chips">';
+        doneIds.forEach(function (id) {
+          var m = TASK_META[id];
+          html += '<span class="hist-chip">' + m.emoji + ' ' + esc(m.label) + '</span>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+    el.innerHTML = html;
+  }
+
+  var tabToday = document.getElementById("tabToday");
+  var tabHistory = document.getElementById("tabHistory");
+  var viewToday = document.getElementById("view-today");
+  var viewHistory = document.getElementById("view-history");
+  tabToday.addEventListener("click", function () {
+    tabToday.classList.add("active"); tabHistory.classList.remove("active");
+    viewToday.style.display = ""; viewHistory.style.display = "none";
+  });
+  tabHistory.addEventListener("click", function () {
+    tabHistory.classList.add("active"); tabToday.classList.remove("active");
+    viewToday.style.display = "none"; viewHistory.style.display = "";
+    renderHistoryTab();
+  });
 
   renderProgress();
   renderHistory();
