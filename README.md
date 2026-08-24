@@ -1,8 +1,20 @@
 # Daily Briefing
 
+[![Live](https://img.shields.io/badge/live-thecogs.github.io%2Fdaily--briefing-2ea44f)](https://thecogs.github.io/daily-briefing/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A personal daily-routine dashboard — a single static HTML page, no build step, no backend.
 
 **Live:** https://thecogs.github.io/daily-briefing/
+
+## Contents
+
+- [What it does](#what-it-does)
+- [Why some things link out instead of embedding](#why-some-things-link-out-instead-of-embedding)
+- [Data and storage](#data-and-storage)
+- [Running locally](#running-locally)
+- [Deploying changes](#deploying-changes)
+- [Content sources and licensing](#content-sources-and-licensing)
 
 ## What it does
 
