@@ -3,7 +3,7 @@
 [![Live](https://img.shields.io/badge/live-thecogs.github.io%2Fdaily--briefing-2ea44f)](https://thecogs.github.io/daily-briefing/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A personal daily-routine dashboard — a single static HTML page, no build step, no backend.
+A personal daily-routine dashboard — a single static HTML page, no build step. Sign in with Google to sync your habits, streak, and history across every device.
 
 **Live:** https://thecogs.github.io/daily-briefing/
 
@@ -37,15 +37,15 @@ This was originally built as a Claude Artifact, which sandboxes the page and blo
 
 ## Data and storage
 
-Everything lives in the browser via `localStorage` — no account, no server, no analytics:
+Sign-in is Google OAuth via [Supabase](https://supabase.com) Auth. Once signed in, each day's checkbox and cardio state is stored in a `daily_logs` table (one row per user per date, `tasks` and `cardio` as JSONB columns), scoped by row-level security so each account can only read and write its own rows. `localStorage` is still used as an offline cache and as the source for a one-time import into Supabase the first time you sign in on a device that already has local history.
 
 | Key | What it holds |
 |---|---|
-| `morning-ledger-v7` | Every day's checkbox state, keyed by date (this is also what powers the History tab) |
-| `morning-ledger-idx-v7` | Which rotating poem/verse/lesson was picked for each date |
-| `morning-ledger-cardio-log-v1` | Which cardio option(s) were checked each day |
+| `morning-ledger-v7` | Local cache of each day's checkbox state, keyed by date |
+| `morning-ledger-idx-v7` | Which rotating poem/verse/lesson was picked for each date (not synced — deterministic from the date, so it's identical on every device anyway) |
+| `morning-ledger-cardio-log-v1` | Local cache of which cardio option(s) were checked each day |
 
-Because it's local to the browser, progress doesn't sync across devices — opening this on a different browser or device starts fresh.
+The Supabase project URL and anon key are embedded in `index.html` — that's expected for Supabase's client-side model; the anon key can't read or write anyone's data on its own, only what the row-level security policies allow for the signed-in user. The database password and the Google OAuth client secret are **not** in this repo (see `.env`, which is gitignored) — they're only needed once, inside Supabase's own dashboard.
 
 ## Running locally
 
