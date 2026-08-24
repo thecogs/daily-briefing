@@ -18,17 +18,17 @@ A personal daily-routine dashboard — a single static HTML page, no build step,
 
 ## What it does
 
-Tracks 14 daily habits as one-tap checkboxes that disappear into a "Completed today" list when done (undo by tapping the chip back). Progress, a 14-day history strip, and a day streak are computed from what you've checked off.
+Tracks 14 daily habits as one-tap checkboxes that disappear into a "Completed today" list when done (undo by tapping the chip back). Progress, a 14-day history strip, and a day streak are computed from what you've checked off. A **History** tab lists every past day with what got done that day.
 
 Beyond plain checkboxes, a few tasks open into their own tile:
 
-- **Strength training** — a 6-day push/pull/legs program that rotates by day of week. Log your top set weight and see the change versus the same lift from a week ago.
-- **Cardio — Norwegian 4×4** — a working interval timer for the protocol (10 min warm-up, 4×[4 min hard / 3 min easy], 5 min cool-down), with a segmented progress bar and audio cues via the Web Audio API.
+- **Strength training** — a plain yes/no for whatever's on the day's lifting plan.
+- **Cardio** — check off however you did it: hike, run, or 10k steps.
 - **Read a poem** — a rotating set of complete public-domain poems, with a link to [today's actual pick on Poetry Foundation](https://www.poetryfoundation.org/poems/poem-of-the-day).
 - **Pray** — a rotating KJV verse, with a link to [today's actual pick on Bible.com](https://www.bible.com/verse-of-the-day).
-- **20 min of French** — three rotating B1/B2-level reading lessons with a grammar note, vocab list, and text-to-speech playback (`SpeechSynthesis`).
-- **Crossword** — links to [Dictionary.com's daily crossword](https://www.dictionary.com/games/crossword), plus a small built-in warm-up puzzle.
-- **Morning stretch** — a short stretch list plus a YouTube search link for a guided routine.
+- **20 min of French** — six rotating B1/B2-level reading lessons, each with a grammar note, vocab list, and text-to-speech playback (`SpeechSynthesis`).
+- **Crossword** — a genuinely new mini crossword generated every day (a 5-letter "spine" word paired with three procedurally matched 3-letter across words — thousands of possible combinations, not a fixed set), plus a link to [Dictionary.com's daily crossword](https://www.dictionary.com/games/crossword) for the full-size version.
+- **Morning stretch** — Baduanjin, the classical "Eight Pieces of Brocade" qigong set, with a cue for each move.
 - **Learn something new** — a shuffleable fun-fact tile.
 
 ## Why some things link out instead of embedding
@@ -41,9 +41,9 @@ Everything lives in the browser via `localStorage` — no account, no server, no
 
 | Key | What it holds |
 |---|---|
-| `morning-ledger-v6` | Today's checkbox state, keyed by date |
-| `morning-ledger-idx-v6` | Which rotating poem/verse/lesson/puzzle/fact was picked for each date |
-| `morning-ledger-strength-log-v1` | Logged top-set weights, keyed by date |
+| `morning-ledger-v7` | Every day's checkbox state, keyed by date (this is also what powers the History tab) |
+| `morning-ledger-idx-v7` | Which rotating poem/verse/lesson was picked for each date |
+| `morning-ledger-cardio-log-v1` | Which cardio option(s) were checked each day |
 
 Because it's local to the browser, progress doesn't sync across devices — opening this on a different browser or device starts fresh.
 
@@ -76,7 +76,7 @@ git push
 
 - Poems: Frost, Blake, Dickinson — all public domain in the US.
 - Bible verses: King James Version, public domain.
-- Fun facts, French lessons, and the crossword warm-up: written for this project.
+- Fun facts, French lessons, the qigong set descriptions, and the crossword word/clue bank: written for this project.
 
 ## License
 
